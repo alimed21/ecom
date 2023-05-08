@@ -86,6 +86,13 @@
             font-weight: bold;
             margin-top: 7px;
         }
+        .bouDev {
+            text-align:center;
+        }
+        .bouDev img{
+            width: 75%;
+            height: auto;
+        }
     </style>
 
 </head>
