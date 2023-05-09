@@ -93,6 +93,14 @@
             width: 75%;
             height: auto;
         }
+        .logoBou{
+            height: auto;
+            width: 100%;
+        }
+        .addLogo{
+            text-align: center;
+            padding: 10px;
+        }
     </style>
 
 </head>

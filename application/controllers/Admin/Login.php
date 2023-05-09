@@ -50,8 +50,10 @@ class Login extends CI_Controller
                 );
 
                 $this->session->set_userdata($session_data);
-                $action = "Connexion de l'utilisateur".$result[0]->username." de la boutique ".$result[0]->nom_boutique;
-                $this->histoirque($action);
+                //$action = "Connexion de l'utilisateur ".$result[0]->username." de la boutique ".$result[0]->nom_boutique;
+                $action = "Connexion avec succès";
+                $color = "success";
+                $this->histoirque($action, $color);
                 redirect("Admin/Produit");
             }
             else
@@ -193,25 +195,27 @@ class Login extends CI_Controller
     }
 
 
-    /** Historique */
-    public function histoirque($action)
-    {
-        $data = array(
-            'id_user' =>$this->session->userdata('id_user'),
-            'action_user' => $action,
-            'date_his' =>$this->getDatetimeNow()
-        );
-        $this->Login_model->log_manager_user($data);
-    }
-
     //Logout function
     public function logout()
     {
         $action = "Déconnexion";
-        $this->histoirque($action);
+        $color = "danger";
+        $this->histoirque($action, $color);
         $this->session->unset_userdata('id_user');
         session_destroy();
-        redirect('Admin/Login', 'refresh');
+        redirect('Login', 'refresh');
+    }
+
+     /** Historique */
+    public function histoirque($action, $color)
+    {
+        $data = array(
+            'id_user'       =>$this->session->userdata('id_user'),
+            'action_user'   => $action,
+            'his_color'     => $color,
+            'date_his'      =>$this->getDatetimeNow()
+        );
+        $this->Login_model->log_manager_user($data);
     }
 }
 

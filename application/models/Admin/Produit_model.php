@@ -234,4 +234,28 @@ class Produit_model extends CI_Model
         $query = $this->db->get();
         return $query->row();
     }
+
+    public function getlastProduit($id){
+        $this->db->select('id_prod, prod, description, date_prod, username, image');
+        $this->db->from('produit as p');
+        $this->db->join('utilisateur as u', 'u.id_user = p.id_user_add');
+        $this->db->where('p.id_boutique', $id);
+        $this->db->where('p.date_delete is null');
+        $this->db->where('p.id_admin_delete is null');
+        $this->db->where('p.id_user_delete is null');
+        $this->db->where('p.date_user_delete is null');
+        $this->db->limit(5);
+        $this->db->order_by("date_prod", "desc");
+
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

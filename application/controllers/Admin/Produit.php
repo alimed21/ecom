@@ -138,6 +138,9 @@ class Produit extends CI_Controller
 
                             if($upload_files == TRUE)
                             {
+                                $action = "Produit n°".$token." a été ajouter avec succès";
+                                $color = "primary";
+                                $this->histoirque($action, $color);
                                 $this->session->set_flashdata('success', 'Votre produit a été ajouté');
                                 redirect('Admin/Produit/listeProduits', 'refresh');
                             }
@@ -212,6 +215,9 @@ class Produit extends CI_Controller
 
                         if($upload_files == TRUE)
                         {
+                            $action = "Produit n°".$token." a été ajouter avec succès";
+                            $color = "primary";
+                            $this->histoirque($action, $color);
                             $this->session->set_flashdata('success', 'Votre produit a été ajouté');
                             redirect('Admin/Produit/listeProduits', 'refresh');
                         }
@@ -781,5 +787,18 @@ class Produit extends CI_Controller
                 redirect("Admin/Produit/listeProduits");
             }
         }
+    }
+
+
+     /** Historique */
+    public function histoirque($action, $color)
+    {
+        $data = array(
+            'id_user'       =>$this->session->userdata('id_user'),
+            'action_user'   => $action,
+            'his_color'     => $color,
+            'date_his'      =>$this->getDatetimeDelete()
+        );
+        $this->Login_model->log_manager_user($data);
     }
 }

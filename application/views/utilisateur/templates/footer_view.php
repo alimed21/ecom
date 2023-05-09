@@ -270,7 +270,7 @@
     $("#cate").on('change',function (){
         var id = $(this).val();
         $.ajax({
-            url:'<?php echo base_url();?>Admin/Produit/getsubcategory?cid='+id,
+            url:'<?php echo base_url();?>index.php/Admin/Produit/getsubcategory?cid='+id,
             success:function(result){
                 $('#subcate').html(result);
             }

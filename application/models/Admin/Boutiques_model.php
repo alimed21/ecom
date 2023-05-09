@@ -74,4 +74,51 @@ class Boutiques_model extends CI_Model
             return false;
         }
     }
+
+    public function getInfoBou($code){
+        $this->db->select('nom_boutique, tele_boutique, adr_boutique, code_boutique, page_facebook');
+        $this->db->from('boutiques');
+        $this->db->where('code_boutique', $code);
+        $this->db->where('id_admin_valid is not null');
+        $this->db->where('date_valid is not null');
+        $this->db->where('id_admin_delete is null');
+        $this->db->where('date_delete is null');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function getLogoBou($code){
+        $this->db->select('logo_boutique');
+        $this->db->from('boutiques');
+        $this->db->where('code_boutique', $code);
+        $this->db->where('id_admin_valid is not null');
+        $this->db->where('date_valid is not null');
+        $this->db->where('id_admin_delete is null');
+        $this->db->where('date_delete is null');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public function addLogo($data, $id){
+        $this->db->where('id_boutique', $id );
+        $this->db->update('boutiques', $data);
+        return true;
+    }
 }

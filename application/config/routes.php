@@ -64,6 +64,9 @@ $routes['listeUtilisateurs'] = 'Admin/Utilisateur';
 
 /** Vendeur */
 $route['Parametres/changerMotPasse'] = 'Admin/Parametres/motPasse';
+$route['Parametres/voirProfile'] = 'Admin/Parametres/voirProfile';
+$route['Parametres/ajouterLogo'] = 'Admin/Parametres/ajouterLogo';
+
 
 /** Users */
 $route['default_controller'] = 'Accueil';

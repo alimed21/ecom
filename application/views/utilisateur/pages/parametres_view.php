@@ -68,7 +68,7 @@
                             <h5>Information boutique</h5>
                         </div>
                     </div>
-                    <div class="imgDiv">
+                    <div class="bouDev">
                         <img src="<?=base_url();?>assets/images/img/boutique.png" alt="">
                         <p>
                             Modifier les informations de votre boutique.

@@ -27,6 +27,14 @@ class Parametres extends CI_Controller
         return $datetime->format('Y-m-d');
     }
 
+     function getDatetimeNowHis()
+     {
+         $tz_object = new DateTimeZone('Africa/Djibouti');
+         $datetime = new DateTime();
+         $datetime->setTimezone($tz_object);
+         return $datetime->format('Y-m-d H:i:s');
+     }
+
     public function index(){
         /** Count commande */
         $boutique = $this->session->userdata('id_boutique');
@@ -86,8 +94,9 @@ class Parametres extends CI_Controller
 
                     if ($nouveauPass = true)
                     {
-                        $action = "Modification mot de passe ".$id;
-                        $this->histoirque($action);
+                        $action = "Vous venez de modifier votre mot de passe.";
+                        $color = "warning";
+                        $this->histoirque($action, $color);
                         redirect('Admin/Login/logout');
                     }
                     else{
@@ -107,6 +116,109 @@ class Parametres extends CI_Controller
         }
         else{
             $this->motPasse();
+        }
+    }
+
+    /** Profil user **/
+    public function voirProfile(){
+        /** Count commande */
+        $boutique = $this->session->userdata('id_boutique');
+        $countCommandes = $this->Commande_model->countCommande($boutique);
+        $data['countCommandes'] = $countCommandes;
+
+        /**Historique de l'utilisateur **/
+        $id_user = $this->session->userdata('id_user');
+        $historyUser = $this->Login_model->historyUser($id_user);
+        $data['historyUser'] = $historyUser;
+
+        /** Information de la boutique **/
+        $code = $this->session->userdata('code_boutique');
+        $infoBou = $this->Boutiques_model->getInfoBou($code);
+        $data['infoBou'] = $infoBou;
+
+        /** Get 3 last article **/
+        $lastProd = $this->Produit_model->getlastProduit($boutique);
+        $data['lastProd'] = $lastProd;
+
+        /** Get logo boutique **/
+        $logoBou = $this->Boutiques_model->getLogoBou($code);
+        $data['logoBou'] = $logoBou;
+
+        /** Titre */
+        $titreAffiche = 'Votre profile';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/profile_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
+    }
+
+    /** Add Logo **/
+    public function ajouterLogo(){
+        /** Count commande */
+        $boutique = $this->session->userdata('id_boutique');
+        $countCommandes = $this->Commande_model->countCommande($boutique);
+        $data['countCommandes'] = $countCommandes;
+
+        $data['id'] = $boutique;
+        /** Titre */
+        $titreAffiche = 'Ajouter un logo';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/ajouterLogo_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
+    }
+
+    public function verificationLogo(){
+        //Config image
+        $config['upload_path'] = './uploads/logo';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = 2000;
+        $config['max_width'] = 400;
+        $config['max_height'] = 400;
+        $config['encrypt_name'] = TRUE;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload('userfile')) {
+            $data['error_message'] = $this->upload->display_errors();
+            /** Count commande */
+            $boutique = $this->session->userdata('id_boutique');
+            $countCommandes = $this->Commande_model->countCommande($boutique);
+            $data['countCommandes'] = $countCommandes;
+
+            $data['id'] = $boutique;
+
+            /** Titre */
+            $titreAffiche = 'Ajouter un logo';
+            $data['titreAffiche'] = $titreAffiche;
+
+            $this->load->view('utilisateur/templates/header_view', $data);
+            $this->load->view('utilisateur/pages/ajouterLogo_view', $data);
+            $this->load->view('utilisateur/templates/footer_view');
+        }
+        else{
+            $id = $this->input->post('id');
+            $full_path = strtolower($this->upload->data('file_name'));
+
+            $data = array(
+                'logo_boutique' => $full_path
+            );
+
+            $addLogo = $this->Boutiques_model->addLogo($data, $id);
+
+            if($addLogo == true){
+                $action = "Vous venez d'ajouter le logo de la boutique";
+                $color = "primary";
+                $this->histoirque($action, $color);
+                $this->session->set_flashdata('success', 'Votre produit a été ajouté');
+                redirect('Parametres/voirProfile', 'refresh');
+            }
+            else{
+                $this->session->set_flashdata('error', "Veuillez réessayer.");
+                redirect('Parametres/ajouterLogo', 'refresh');
+            }
         }
     }
 
@@ -168,13 +280,14 @@ class Parametres extends CI_Controller
     }
 
     /** Historique */
-    public function histoirque($action)
+    public function histoirque($action, $color)
     {
         $data = array(
-            'id_user' =>$this->session->userdata('id_user'),
-            'action' => $action,
-            'date_his' =>$this->getDatetimeNow()
+            'id_user'            => $this->session->userdata('id_user'),
+            'action_user'        => $action,
+            'his_color'          => $color,
+            'date_his'           => $this->getDatetimeNowHis()
         );
-        $this->Login_model->log_manager($data);
+        $this->Login_model->log_manager_user($data);
     }
 }
