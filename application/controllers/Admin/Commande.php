@@ -54,6 +54,9 @@ class Commande extends CI_Controller
 
         $validCmd = $this->Commande_model->validCmd($data, $idFour, $code_cmd);
         if ($validCmd = TRUE){
+            $action = "Vous venez de valider la commande n°".$code_cmd.".";
+            $color = "info";
+            $this->histoirque($action, $color);
             $this->session->set_flashdata('success', 'Commande valider. Merci de contacter le client et le prévenir.');
             redirect('Admin/Commande');
         }
@@ -104,6 +107,9 @@ class Commande extends CI_Controller
         $quantiteAJour = $this->Commande_model->quantiteAJour($id_prod, $data);
 
         if ($quantiteAJour = TRUE){
+            $action = "Vous venez de rejeter la commande n°".$code_cmd.".";
+            $color = "danger";
+            $this->histoirque($action, $color);
             $this->session->set_flashdata('success', 'La commande a bien été supprimé.');
             redirect('Admin/Commande');
         }
@@ -111,5 +117,17 @@ class Commande extends CI_Controller
             $this->session->set_flashdata('error', "Une erreur s\'est produit veuillez contactez le développeur.");
             redirect('Admin/Commande');
         }
+    }
+
+      /** Historique */
+    public function histoirque($action, $color)
+    {
+        $data = array(
+            'id_user'            => $this->session->userdata('id_user'),
+            'action_user'        => $action,
+            'his_color'          => $color,
+            'date_his'           => $this->getDatetimeNow()
+        );
+        $this->Login_model->log_manager_user($data);
     }
 }
