@@ -10,6 +10,7 @@ class Parametres extends CI_Controller
         $this->load->model("Admin/Boutiques_model");
         $this->load->model("Admin/Login_model");
         $this->load->model('Admin/Categories_model');
+        $this->load->model('Admin/Parametres_model');
         $this->load->model('Admin/Commande_model');
         $this->load->library('form_validation');
         $this->load->helper('string');
@@ -144,6 +145,12 @@ class Parametres extends CI_Controller
         $logoBou = $this->Boutiques_model->getLogoBou($code);
         $data['logoBou'] = $logoBou;
 
+        /** Get profile info **/
+        $infoProfil = $this->Parametres_model->getInfoProfil($id_user);
+        $data['infoProfil'] = $infoProfil;
+
+        //var_dump($infoProfil);die;
+
         /** Titre */
         $titreAffiche = 'Votre profile';
         $data['titreAffiche'] = $titreAffiche;
@@ -220,6 +227,100 @@ class Parametres extends CI_Controller
                 redirect('Parametres/ajouterLogo', 'refresh');
             }
         }
+    }
+
+    /** création profile **/
+    public function ajouterProfil(){
+        /** Count commande */
+        $boutique = $this->session->userdata('id_boutique');
+        $countCommandes = $this->Commande_model->countCommande($boutique);
+        $data['countCommandes'] = $countCommandes;
+
+        $id_user = $this->session->userdata('id_user');
+
+        $data['id'] = $id_user;
+        /** Titre */
+        $titreAffiche = 'Créer votre profile';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/ajouterProfil_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
+    }
+
+    public function verificationProfile(){
+        //Config image
+        $config['upload_path'] = './uploads/profile';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = 2000;
+        $config['max_width'] = 400;
+        $config['max_height'] = 400;
+        $config['encrypt_name'] = TRUE;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload('userfile')) {
+            $data['error_message'] = $this->upload->display_errors();
+            /** Count commande */
+            $boutique = $this->session->userdata('id_boutique');
+            $countCommandes = $this->Commande_model->countCommande($boutique);
+            $data['countCommandes'] = $countCommandes;
+
+            $id_user = $this->session->userdata('id_user');
+
+            $data['id'] = $id_user;
+            /** Titre */
+            $titreAffiche = 'Créer votre profile';
+            $data['titreAffiche'] = $titreAffiche;
+
+            $this->load->view('utilisateur/templates/header_view', $data);
+            $this->load->view('utilisateur/pages/ajouterProfil_view', $data);
+            $this->load->view('utilisateur/templates/footer_view');
+        }
+        else{
+            $this->form_validation->set_rules('nom_complet', "nom", 'trim|required');
+            $this->form_validation->set_rules('adr', "adresse", 'trim|required');
+            $this->form_validation->set_rules('tele', "téléphone", 'trim|required');
+
+            if ($this->form_validation->run() == true){
+
+                $nom = $this->input->post('nom_complet');
+                $adresse = $this->input->post('adr');
+                $tele    = $this->input->post('tele');
+                $date_add = $this->getDatetimeNowHis();
+                $id_user = $this->session->userdata('id_user');
+                $full_path = strtolower($this->upload->data('file_name'));
+
+                $data = array(
+                    'nom_complet'   => $nom,
+                    'adresse'       => $adresse,
+                    'telephone '    => $tele,
+                    'photo'         => $full_path,
+                    'id_user'       => $id_user,
+                    'date_add'      => $date_add
+                );
+
+                $addProfile = $this->Parametres_model->addProfile($data);
+
+                if ($addProfile == true)
+                {
+                    $action = "Vous venez de créer votre profile le ".$date_add.".";
+                    $color = "primary";
+                    $this->histoirque($action, $color);
+                    $this->session->set_flashdata('sucess', "Votre profile a bien été enregistré");
+                    redirect('Admin/Parametres/voirProfile');
+                }
+            else{
+                $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                redirect('Admin/Parametres/ajouterProfil');
+            }
+
+            }
+            else{
+                $this->ajouterProfil();
+            }
+        }
+
     }
 
     /** INformation boutique */

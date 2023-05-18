@@ -374,6 +374,9 @@ class Produit extends CI_Controller
                         $updateProduit = $this->Produit_model->updateProduit($data, $token);
 
                         if ($updateProduit = true) {
+                            $action = "Vous venez de modifier le produit n°".$token.".";
+                            $color = "warning";
+                            $this->histoirque($action, $color);
                             $this->session->set_flashdata('success', 'Votre produit a été modifier');
                             redirect('Admin/Produit/listeProduits', 'refresh');
                         } else {
@@ -398,6 +401,9 @@ class Produit extends CI_Controller
                         $updateProduit = $this->Produit_model->updateProduit($data, $token);
 
                         if ($updateProduit = true) {
+                            $action = "Vous venez de modifier le produit n°".$token.".";
+                            $color = "warning";
+                            $this->histoirque($action, $color);
                             $this->session->set_flashdata('success', 'Votre produit a été modifier');
                             redirect('Admin/Produit/listeProduits', 'refresh');
                         } else {
@@ -445,6 +451,9 @@ class Produit extends CI_Controller
                     $updateProduit = $this->Produit_model->updateProduit($data, $token);
 
                     if ($updateProduit = true) {
+                        $action = "Vous venez de modifier le produit n°".$token.".";
+                        $color = "warning";
+                        $this->histoirque($action, $color);
                         $this->session->set_flashdata('success', 'Votre produit a été modifier');
                         redirect('Admin/Produit/listeProduits', 'refresh');
                     } else {
@@ -469,6 +478,9 @@ class Produit extends CI_Controller
                     $updateProduit = $this->Produit_model->updateProduit($data, $token);
 
                     if ($updateProduit = true) {
+                        $action = "Vous venez de modifier le produit n°".$token.".";
+                        $color = "warning";
+                        $this->histoirque($action, $color);
                         $this->session->set_flashdata('success', 'Votre produit a été modifier');
                         redirect('Admin/Produit/listeProduits', 'refresh');
                     } else {
@@ -604,6 +616,9 @@ class Produit extends CI_Controller
             $desactiveProduit = $this->Produit_model->desactiveProduit($data, $token);
 
             if ($desactiveProduit = true) {
+                $action = "Vous venez de modifier le prix ou la quantité du produit n°".$token.".";
+                $color = "warning";
+                $this->histoirque($action, $color);
                 $this->session->set_flashdata('success', 'La quantité ou le prix de votre produit a été modifié');
                 redirect('Admin/Produit/listeProduits', 'refresh');
             } else {
@@ -767,24 +782,35 @@ class Produit extends CI_Controller
         }
         else
         {
-            $id_user = $this->session->userdata('id_user');
-            $date_delete = $this->getDatetimeDelete();
-            $etat = 1;
+            $verificationProduit = $this->Produit_model->verificationProduit($token);
 
-            $data = array(
-                'id_user_delete' => $id_user,
-                'date_user_delete' => $date_delete
-            );
-            //Annonce premium
-            if($this->Produit_model->validProduit($data, $token))
-            {
-                $this->session->set_flashdata('success', 'Produit enlever.');
+            if($verificationProduit == true){
+                $this->session->set_flashdata('error', 'Vous n\'avez pas l\'autorisation de supprimer ce produit.');
                 redirect("Admin/Produit/listeProduits");
             }
-            else
-            {
-                $this->session->set_flashdata('error', 'Erreur survenu, veuillez réessayer.');
-                redirect("Admin/Produit/listeProduits");
+            else{
+                $id_user = $this->session->userdata('id_user');
+                $date_delete = $this->getDatetimeDelete();
+                $etat = 1;
+
+                $data = array(
+                    'id_user_delete' => $id_user,
+                    'date_user_delete' => $date_delete
+                );
+                //Annonce premium
+                if($this->Produit_model->validProduit($data, $token))
+                {
+                    $action = "Vous venez de supprimer le produit n°".$token.".";
+                    $color = "danger";
+                    $this->histoirque($action, $color);
+                    $this->session->set_flashdata('success', 'Produit enlever.');
+                    redirect("Admin/Produit/listeProduits");
+                }
+                else
+                {
+                    $this->session->set_flashdata('error', 'Erreur survenu, veuillez réessayer.');
+                    redirect("Admin/Produit/listeProduits");
+                }
             }
         }
     }

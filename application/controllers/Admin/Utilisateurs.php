@@ -27,6 +27,14 @@ class Utilisateurs extends CI_Controller
         return $datetime->format('Y-m-d');
     }
 
+    function getDatetimeNowHis()
+    {
+        $tz_object = new DateTimeZone('Africa/Djibouti');
+        $datetime = new DateTime();
+        $datetime->setTimezone($tz_object);
+        return $datetime->format('Y-m-d H:i:s');
+    }
+
     public function index(){
         /** Count commande */
         $boutique = $this->session->userdata('id_boutique');
@@ -115,6 +123,9 @@ class Utilisateurs extends CI_Controller
 
                 if ($inscriptionUser = true)
                 {
+                    $action = "Vous venez d\'ajouter un nouveau utilisateur qui est ".$username.".";
+                    $color = "primary";
+                    $this->histoirque($action, $color);
                     $this->session->set_flashdata('success', 'Utilisateur créer avec succès.');
                     redirect('Admin/Utilisateurs');
                 }
@@ -130,5 +141,57 @@ class Utilisateurs extends CI_Controller
         else{
             $this->ajouterUtilisateur();
         }
+    }
+
+
+     /**public function supprimerUtilisateur($id = null)
+     {
+         if ($id == null) {
+             redirect("Admin/Utilisateurs/");
+         } else {
+
+             $verificationUtilisateurs = $this->Utilisateurs_model->verificationUtilisateurs($id);
+
+             $infoUser = $this->Utilisateurs_model->getNomUser($id);
+
+            if($verificationProduit == true){
+                $this->session->set_flashdata('error', 'Vous n\'avez pas l\'autorisation de supprimer cet utilisateur.');
+                redirect("Admin/Utilisateurs");
+            }
+            else{
+                $id_admin = $this->session->userdata('id_admin');
+                $date_delete = $this->getDatetimeNow();
+
+                $data = array(
+                    'id_admin_delete' => $id_admin,
+                    'date_delete' => $date_delete
+                );
+
+                $supprimerUtilisateur = $this->Utilisateurs_model->suppressionUtilisateur($id, $data);
+                if ($supprimerUtilisateur == true) {
+                    $action = "Vous venez de supprimer l\'utilisateur ".$infoUser." de votre boutique.";
+                    $color = "danger";
+                    $this->histoirque($action, $color);
+                    $this->session->set_flashdata('success', 'Utilisateur bloquer.');
+                    redirect("Admin/Utilisateurs/");
+                } else {
+                    $this->session->set_flashdata('error', 'Erreur survenu, veuillez réessayer.');
+                    redirect("Admin/Utilisateurs/");
+                }
+            }
+
+         }
+     }**/
+
+     /** Historique */
+    public function histoirque($action, $color)
+    {
+        $data = array(
+            'id_user'            => $this->session->userdata('id_user'),
+            'action_user'        => $action,
+            'his_color'          => $color,
+            'date_his'           => $this->getDatetimeNowHis()
+        );
+        $this->Login_model->log_manager_user($data);
     }
 }

@@ -20,7 +20,7 @@ class Utilisateurs_model extends CI_Model
     }
 
     public function getAllUserByShop($bou){
-        $this->db->select('id_user, username, email, u.code_boutique, date_inscrit, nom_boutique, u.id_admin_valid, u.date_valid');
+        $this->db->select('id_user, username, email, u.code_boutique, date_inscrit, nom_boutique, u.id_admin_valid, u.date_valid, u.id_admin_delete, u.date_delete');
         $this->db->from('utilisateur as u');
         $this->db->join('boutiques as bou', 'u.id_boutique = bou.id_boutique');
         $this->db->where('u.id_boutique', $bou);
@@ -111,4 +111,20 @@ class Utilisateurs_model extends CI_Model
         return true;
     }
 
+    public function verificationUtilisateurs($id){
+        $this->db->from('utilisateur as u');
+        $this->db->where('u.id_user', $id);
+        $this->db->where('u.id_admin_valid is not null');
+        $this->db->where('u.date_valid is not null');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

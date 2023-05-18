@@ -258,4 +258,28 @@ class Produit_model extends CI_Model
             return false;
         }
     }
+
+    public function verificationProduit($token){
+        $this->db->from('produit as p');
+        $this->db->where('p.token', $token);
+
+        $this->db->where('p.id_admin_valid is not null');
+        $this->db->where('p.date_valid is not null');
+
+        $this->db->where('p.date_delete is null');
+        $this->db->where('p.id_admin_delete is null');
+        $this->db->where('p.id_user_delete is null');
+        $this->db->where('p.date_user_delete is null');
+
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

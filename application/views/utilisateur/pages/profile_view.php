@@ -74,7 +74,7 @@
           <div class="col-lg-6">
              <div class="profile-content tab-content">
                <div id="profile-activity" class="tab-pane fade active show">
-                  <div class="card" style="width: 100%; height: 907px; overflow-y: scroll;">
+                  <div class="card" style="width: 100%; height: 960px; overflow-y: scroll;">
                      <div class="card-header d-flex justify-content-between">
                         <div class="header-title">
                            <h4 class="card-title">Activité</h4>
@@ -107,48 +107,71 @@
                      <div class="card-body">
                         <div class="text-center">
                            <div class="user-profile">
-                              <img src="../../assets/images/avatars/01.png" alt="profile-img" class="rounded-pill avatar-130 img-fluid">
+                              <?php if($infoProfil != false):?>
+                                 <?php foreach($infoProfil as $info):?>
+                                 <?php endforeach;?>
+                              <?php else:?>
+                                 <img src="<?php echo base_url();?>assets/images/img/missing.jpg" class="logoBou" style="width: 70%"/>
+                                 <div class="addLogo">
+                                    <a href="<?php echo base_url();?>Parametres/ajouterProfil">
+                                       <button class="btn btn-primary">
+                                          Ajouter
+                                       </button>
+                                    </a>
+                                 </div>
+                              <?php endif;?>
+
                            </div>
                            <div class="mt-3">
-                              <h3 class="d-inline-block">Austin Robertson</h3>
-                              <p class="d-inline-block pl-3"> - Web developer</p>
-                              <p class="mb-0">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                             <?php if($infoProfil != false):?>
+                                 <?php foreach($infoProfil as $info):?>
+                                    <img src="<?php echo base_url();?>uploads/profile/<?php echo $info->photo;?>" class="logoBou" style="width: 70%"/>
+                                    <h3 class="d-inline-block"><?php echo $info->nom_complet;?></h3>
+                                 <?php endforeach;?>
+                              <?php endif;?>
                            </div>
                         </div>
                      </div>
                   </div>
-                  <div class="card">
+                  <?php if($infoProfil != false):?>
+                     <div class="card">
                      <div class="card-header">
                         <div class="header-title">
-                           <h4 class="card-title">About User</h4>
+                           <h4 class="card-title">A propos de vous</h4>
                         </div>
                      </div>
                      <div class="card-body">
                         <div class="user-bio">
                            <p>Tart I love sugar plum I love oat cake. Sweet roll caramels I love jujubes. Topping cake wafer.</p>
                         </div>
-                        <div class="mt-2">
-                        <h6 class="mb-1">Joined:</h6>
-                        <p>Feb 15, 2021</p>
-                        </div>
-                        <div class="mt-2">
-                        <h6 class="mb-1">Lives:</h6>
-                        <p>United States of America</p>
-                        </div>
-                        <div class="mt-2">
-                        <h6 class="mb-1">Email:</h6>
-                        <p><a href="#" class="text-body"> austin@gmail.com</a></p>
-                        </div>
-                        <div class="mt-2">
-                        <h6 class="mb-1">Url:</h6>
-                        <p><a href="#" class="text-body" target="_blank"> www.bootstrap.com </a></p>
-                        </div>
-                        <div class="mt-2">
-                        <h6 class="mb-1">Contact:</h6>
-                        <p><a href="#" class="text-body">(001) 4544 565 456</a></p>
-                        </div>
+                         <?php if($infoProfil != false):?>
+                           <?php foreach($infoProfil as $info):?>
+                              <div class="mt-2">
+                                 <h6 class="mb-1">Vous avez créer votre profile le :</h6>
+                                 <p><?php echo $info->date_add;?></p>
+                              </div>
+                              <div class="mt-2">
+                                 <h6 class="mb-1">Votre adresse:</h6>
+                                 <p><?php echo $info->adresse;?></p>
+                              </div>
+                              <div class="mt-2">
+                                 <h6 class="mb-1">Email:</h6>
+                                 <p><a href="#" class="text-body"><?php echo $info->email;?></a></p>
+                              </div>
+                              <div class="mt-2">
+                                 <h6 class="mb-1">Télépone:</h6>
+                                 <p><a href="#" class="text-body" target="_blank"> <?php echo $info->telephone;?> </a></p>
+                              </div>
+                              <div class="mt-2">
+                                 <h6 class="mb-1">Nom d'utilisateur:</h6>
+                                 <p><a href="#" class="text-body"><?php echo $info->username;?></a></p>
+                              </div>
+                           <?php endforeach;?>
+                          <?php endif;?>
                      </div>
                   </div>
+                  <?php endif;?>
+
                </div>
             </div>
           </div>
