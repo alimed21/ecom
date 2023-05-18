@@ -66,6 +66,7 @@ $routes['listeUtilisateurs'] = 'Admin/Utilisateur';
 $route['Parametres/changerMotPasse'] = 'Admin/Parametres/motPasse';
 $route['Parametres/voirProfile'] = 'Admin/Parametres/voirProfile';
 $route['Parametres/ajouterLogo'] = 'Admin/Parametres/ajouterLogo';
+$route['Parametres/ajouterProfil'] = 'Admin/Parametres/ajouterProfil';
 
 
 /** Users */
