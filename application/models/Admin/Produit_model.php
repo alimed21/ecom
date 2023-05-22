@@ -50,23 +50,13 @@ class Produit_model extends CI_Model
         return $query->result();
     }
 
-    public function getAllImages($idBoutique){
-        $this->db->select('id_photo, token_post, photo_name');
+    public function getAllImages($token){
+        $this->db->select('photo_name');
         $this->db->from('photo_joint as ph');
-        $this->db->join('produit as p', 'p.token = ph.token_post');
-        $this->db->join('boutiques as bou', 'bou.id_boutique = p.id_boutique');
-        $this->db->where('bou.id_boutique', $idBoutique);
-        $this->db->where('p.id_boutique', $idBoutique);
-        //Produit
-        $this->db->where('p.date_delete is null');
-        $this->db->where('p.id_admin_delete is null');
+        $this->db->where('ph.token_post', $token);
         //Photo joint
         $this->db->where('ph.date_delete is null');
         $this->db->where('ph.user_delete is null');
-        //Boutique
-        $this->db->where('bou.id_admin_delete is null');
-        $this->db->where('bou.date_delete is null');
-
         $query = $this->db->get();
 
         if($query->num_rows() > 0)

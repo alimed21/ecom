@@ -293,13 +293,53 @@ class Produit extends CI_Controller
         $listeProduitsUser = $this->Produit_model->getAllProduitByUser($idBoutique);
         $data['listeProduitsUser'] = $listeProduitsUser;
 
-        /** Images restant **/
-        $autresImages = $this->Produit_model->getAllImages($idBoutique);
-        $data['autresImages'] = $autresImages;
-
         $this->load->view('utilisateur/templates/header_view', $data);
         $this->load->view('utilisateur/pages/listeProduits_view', $data);
         $this->load->view('utilisateur/templates/footer_view');
+    }
+
+    /**public function test(){
+        $token = "3fjQkYs";
+        $idBoutique = $this->session->userdata('id_boutique');
+
+        /** Images restant
+        $autresImages = $this->Produit_model->getAllImages($token);
+        $data['autresImages'] = $autresImages;
+
+        var_dump($autresImages);die;
+
+
+        if($autresImages != NULL){
+            foreach ($autresImages as $ph){
+                $output['photo_name'] = $ph->photo_name;
+            }
+            var_dump($output['photo_name']);
+        }
+        else{
+            $output['failed'] = '<font color="#ff0000" style="font-size: 20px;">Data not available</font>';
+            echo json_encode($output);
+        }
+    }**/
+
+     public function getOtherPict(){
+        $data = $this->input->get();
+        $token = $data['token'];
+
+        $idBoutique = $this->session->userdata('id_boutique');
+
+        /** Images restant **/
+        $autresImages = $this->Produit_model->getAllImages($token);
+        $data['autresImages'] = $autresImages;
+
+
+        if($autresImages != NULL){
+            echo json_encode($data['autresImages']);
+        }
+        else{
+            $output['failed'] = '<font color="#ff0000" style="font-size: 20px;">Data not available</font>';
+            echo json_encode($output);
+        }
+
     }
 
     public function modifierProduit($token){

@@ -64,7 +64,19 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-light" data-bs-toggle="modal"
+                                    <button type="button" class="btn btn-info voirPic" id="<?php echo $liste->token;?>" data-bs-toggle="modal" data-bs-target="#voirPLusImg" style="background: none;border: none;">
+                                         <i class="icon">
+                                                <svg width="32" viewBox="0 0 24 24" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg" style="color: #1f9126;">
+                                                    <path opacity="0.4" fill-rule="evenodd" clip-rule="evenodd"
+                                                          d="M17.7366 6.04606C19.4439 7.36388 20.8976 9.29455 21.9415 11.7091C22.0195 11.8924 22.0195 12.1067 21.9415 12.2812C19.8537 17.1103 16.1366 20 12 20H11.9902C7.86341 20 4.14634 17.1103 2.05854 12.2812C1.98049 12.1067 1.98049 11.8924 2.05854 11.7091C4.14634 6.87903 7.86341 4 11.9902 4H12C14.0683 4 16.0293 4.71758 17.7366 6.04606ZM8.09756 12C8.09756 14.1333 9.8439 15.8691 12 15.8691C14.1463 15.8691 15.8927 14.1333 15.8927 12C15.8927 9.85697 14.1463 8.12121 12 8.12121C9.8439 8.12121 8.09756 9.85697 8.09756 12Z"
+                                                          fill="currentColor"></path>
+                                                    <path d="M14.4308 11.997C14.4308 13.3255 13.3381 14.4115 12.0015 14.4115C10.6552 14.4115 9.5625 13.3255 9.5625 11.997C9.5625 11.8321 9.58201 11.678 9.61128 11.5228H9.66006C10.743 11.5228 11.621 10.6695 11.6601 9.60184C11.7674 9.58342 11.8845 9.57275 12.0015 9.57275C13.3381 9.57275 14.4308 10.6588 14.4308 11.997Z"
+                                                          fill="currentColor"></path>
+                                                </svg>
+                                            </i>
+                                    </button>
+                                        <!--<button type="button" class="btn btn-light" data-bs-toggle="modal"
                                                 data-bs-target="#voirPLusImg<?php echo $liste->token; ?>"
                                                 style="background: none;border: none;">
                                             <i class="icon">
@@ -77,7 +89,7 @@
                                                           fill="currentColor"></path>
                                                 </svg>
                                             </i>
-                                        </button>
+                                        </button> -->
                                     </td>
                                     <td>
                                         <?php if($liste->id_admin_valid == null && $liste->date_valid == null && $liste->id_admin_delete == null && $liste->date_delete == null):?>
@@ -128,14 +140,12 @@
                             <?php endforeach ?>
                         <?php else:?>
                         <?php endif;?>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 
@@ -181,63 +191,44 @@
     <?php endforeach; ?>
 <?php endif; ?>
 
-<!-- Modal carousel -->
-<?php if ($listeProduitsUser != false): ?>
-    <?php foreach ($listeProduitsUser as $liste): ?>
-        <?php if ($autresImages != false): ?>
-            <?php $active = 1; ?>
-            <div class="modal fade" id="voirPLusImg<?php echo $liste->token; ?>" tabindex="-1"
-                 aria-labelledby="voirPLusImg<?php echo $liste->token; ?>" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="voirPLusImg<?php echo $liste->token; ?>">Les autres images du
-                                produit <?php echo $liste->prod ?></h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="bd-example">
 
-                                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-indicators">
-                                        <?php foreach ($autresImages as $k => $img): ?>
-                                            <?php if ($liste->token == $img->token_post): ?>
-                                                <button type="button" data-bs-target="#carouselExampleCaptions"
-                                                        data-bs-slide-to="<?= $k ?>" class="<?php if($k == 0): ?>active<?php endif; ?>" aria-label="Slide <?=$k?>"></button>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <div class="carousel-inner">
-                                        <?php foreach ($autresImages as $k => $img): ?>
-                                            <?php if ($liste->token == $img->token_post): ?>
-                                                <div class="carousel-item <?php if($k == 0): ?>active<?php endif; ?>">
-                                                    <img class="d-block w-100" width="800" height="400" src="<?= base_url(); ?>uploads/images/<?= $img->photo_name; ?>">
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button"
-                                            data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                </div>
-                            </div>
+
+<div class="modal fade" id="exampleModalDefault" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="bd-example">
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2" class="" aria-current="true"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3" class=""></button>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <div class="carousel-inner" id="imgSlid">
+
                         </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-gray" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <?php $active++; ?>
-        <?php endif; ?>
-    <?php endforeach; ?>
-<?php endif; ?>
+
 

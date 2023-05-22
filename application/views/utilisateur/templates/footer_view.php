@@ -276,6 +276,40 @@
             }
         });
     });
+
+   $(document).ready(function() {
+       $('.voirPic').on('click', function() {
+            var modalID = $(this).attr('id');
+
+           $.ajax({
+               url: '<?php echo base_url();?>index.php/Admin/Produit/getOtherPict?token='+modalID,
+               type: "GET",
+               dataType: "JSON",
+               data: {'id':modalID},
+               success:function(response) {
+                   if (response == null){
+                       showConfirmButton: false
+                   }else{
+                       var tbaris ='';
+
+                       $.each(response,function(index) {
+                           tbaris += '<div class="carousel-item"><img class="d-block w-100" width="800" height="400" src="<?= base_url(); ?>/uploads/images/'+response[index].photo_name+'"></div>';
+                       })
+                       $('#imgSlid').html(tbaris);
+                       jQuery( '.carousel-inner').find('.carousel-item:first' ).addClass( 'active' );
+                       $('#exampleModalDefault').modal('show');
+                   }
+               },
+               error: function (jqXHR, textStatus, errorThrown)
+               {
+                   alert('Error get data from ajax' + errorThrown);
+                   alert('Error get data from ajax' + textStatus);
+                   alert('Error get data from ajax' + jqXHR);
+               }
+           });
+         });
+   });
+
 </script>
 </body>
 </html>
