@@ -6,16 +6,29 @@
                      <div class="d-flex flex-wrap align-items-center justify-content-between">
                         <div class="d-flex flex-wrap align-items-center">
                            <div class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
-                              <img src="<?php echo base_url();?>assets/images/avatars/01.png" alt="User-Profile" class="theme-color-default-img img-fluid rounded-pill avatar-100">
-                              <img src="<?php echo base_url();?>assets/images/avatars/avtar_1.png" alt="User-Profile" class="theme-color-purple-img img-fluid rounded-pill avatar-100">
-                              <img src="<?php echo base_url();?>assets/images/avatars/avtar_2.png" alt="User-Profile" class="theme-color-blue-img img-fluid rounded-pill avatar-100">
-                              <img src="<?php echo base_url();?>assets/images/avatars/avtar_4.png" alt="User-Profile" class="theme-color-green-img img-fluid rounded-pill avatar-100">
-                              <img src="<?php echo base_url();?>assets/images/avatars/avtar_5.png" alt="User-Profile" class="theme-color-yellow-img img-fluid rounded-pill avatar-100">
-                              <img src="<?php echo base_url();?>assets/images/avatars/avtar_3.png" alt="User-Profile" class="theme-color-pink-img img-fluid rounded-pill avatar-100">
+                               <?php if($infoProfil != false):?>
+                                   <?php foreach($infoProfil as $info):?>
+                                       <img class="rounded-pill avatar-130 img-fluid" src="<?php echo base_url();?>uploads/profile/<?php echo $info->photo;?>"/>
+                                   <?php endforeach;?>
+                               <?php else:?>
+                                  <img src="<?php echo base_url();?>assets/images/avatars/01.png" alt="User-Profile" class="theme-color-default-img img-fluid rounded-pill avatar-100">
+                                  <img src="<?php echo base_url();?>assets/images/avatars/avtar_1.png" alt="User-Profile" class="theme-color-purple-img img-fluid rounded-pill avatar-100">
+                                  <img src="<?php echo base_url();?>assets/images/avatars/avtar_2.png" alt="User-Profile" class="theme-color-blue-img img-fluid rounded-pill avatar-100">
+                                  <img src="<?php echo base_url();?>assets/images/avatars/avtar_4.png" alt="User-Profile" class="theme-color-green-img img-fluid rounded-pill avatar-100">
+                                  <img src="<?php echo base_url();?>assets/images/avatars/avtar_5.png" alt="User-Profile" class="theme-color-yellow-img img-fluid rounded-pill avatar-100">
+                                  <img src="<?php echo base_url();?>assets/images/avatars/avtar_3.png" alt="User-Profile" class="theme-color-pink-img img-fluid rounded-pill avatar-100">
+                               <?php endif;?>
                            </div>
                            <div class="d-flex flex-wrap align-items-center mb-3 mb-sm-0">
-                              <h4 class="me-2 h4"><?php echo $this->session->userdata('username');?></h4>
-                              <span> - Commerçant</span>
+                               <?php if($infoProfil != false):?>
+                                   <?php foreach($infoProfil as $info):?>
+                                       <h4 class="me-2 h4"><?php echo $info->nom_complet;?></h4>
+                                       <span> - Commerçant</span>
+                                   <?php endforeach;?>
+                               <?php else:?>
+                                  <h4 class="me-2 h4"><?php echo $this->session->userdata('username');?></h4>
+                                  <span> - Commerçant</span>
+                               <?php endif;?>
                            </div>
                         </div>
                         <ul class="d-flex nav nav-pills mb-0 text-center profile-tab" data-toggle="slider-tab" id="profile-pills-tab" role="tablist">
@@ -109,6 +122,10 @@
                            <div class="user-profile">
                               <?php if($infoProfil != false):?>
                                  <?php foreach($infoProfil as $info):?>
+                                      <img class="rounded-pill avatar-130 img-fluid" src="<?php echo base_url();?>uploads/profile/<?php echo $info->photo;?>"/>
+                                      <div class="mt-3">
+                                          <h3 class="d-inline-block"><?php echo $info->nom_complet;?></h3>
+                                      </div>
                                  <?php endforeach;?>
                               <?php else:?>
                                  <img src="<?php echo base_url();?>assets/images/img/missing.jpg" class="logoBou" style="width: 70%"/>
@@ -119,15 +136,6 @@
                                        </button>
                                     </a>
                                  </div>
-                              <?php endif;?>
-
-                           </div>
-                           <div class="mt-3">
-                             <?php if($infoProfil != false):?>
-                                 <?php foreach($infoProfil as $info):?>
-                                    <img src="<?php echo base_url();?>uploads/profile/<?php echo $info->photo;?>" class="logoBou" style="width: 70%"/>
-                                    <h3 class="d-inline-block"><?php echo $info->nom_complet;?></h3>
-                                 <?php endforeach;?>
                               <?php endif;?>
                            </div>
                         </div>
@@ -166,6 +174,13 @@
                                  <h6 class="mb-1">Nom d'utilisateur:</h6>
                                  <p><a href="#" class="text-body"><?php echo $info->username;?></a></p>
                               </div>
+                             <div class="addLogo">
+                                 <a href="<?php echo base_url();?>Parametres/modifierProfile">
+                                     <button class="btn btn-success">
+                                         Modifier
+                                     </button>
+                                 </a>
+                             </div>
                            <?php endforeach;?>
                           <?php endif;?>
                      </div>
