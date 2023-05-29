@@ -15,6 +15,16 @@ class Produit_model extends CI_Model
             'date_add'   =>date('Y-m-d H:i:s')
         );
         $this->db->insert('photo_joint', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    public function updateothPhoto($filename, $token){
+        $data = array(
+            'token_post' => $token,
+            'photo_name' => $filename,
+            'date_add'   =>date('Y-m-d H:i:s')
+        );
+        $this->db->insert('photo_joint', $data);
     }
     public function getDetailProduit($idBoutique, $token){
         $this->db->select('id_prod, token, prod, prix, description, promo, prix_promo, date_prod, quantite');
@@ -57,6 +67,8 @@ class Produit_model extends CI_Model
         //Photo joint
         $this->db->where('ph.date_delete is null');
         $this->db->where('ph.user_delete is null');
+        $this->db->order_by("date_add", "desc");
+        $this->db->limit(3);
         $query = $this->db->get();
 
         if($query->num_rows() > 0)
@@ -69,6 +81,11 @@ class Produit_model extends CI_Model
         }
     }
 
+    public function updateImgProd($data, $token){
+        $this->db->where('token', $token);
+        $this->db->update('produit', $data);
+        return true;
+    }
     public function validProduit($data, $token){
         $this->db->where('token', $token );
         $this->db->update('produit', $data);

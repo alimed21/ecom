@@ -17,8 +17,11 @@ class Boutiques extends CI_Controller
         return $datetime->format('Y-m-d');
     }
 
-    /** Gestion des produits */
-    public function index()
+    /** Gestion des boutiques */
+    public function index(){
+        
+    }
+    public function inscriptionBoutique()
     {
         /** Titre */
         $titreAffiche = 'Information de la boutique';

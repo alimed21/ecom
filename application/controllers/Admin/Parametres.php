@@ -160,6 +160,22 @@ class Parametres extends CI_Controller
         $this->load->view('utilisateur/templates/footer_view');
     }
 
+    public function modifierProfile(){
+        /** iD USER */
+        $id_user = $this->session->userdata('id_user');
+
+        /** Get profil user */
+        $infoUser = $this->Parametres_model->getInfoProfil($id_user);
+        $data['infoUser'] = $infoUser;
+        /** Titre */
+        $titreAffiche = 'Modification du profile';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/modifierProfile_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
+    }
+
     /** Add Logo **/
     public function ajouterLogo(){
         /** Count commande */
@@ -219,12 +235,78 @@ class Parametres extends CI_Controller
                 $action = "Vous venez d'ajouter le logo de la boutique";
                 $color = "primary";
                 $this->histoirque($action, $color);
-                $this->session->set_flashdata('success', 'Votre produit a été ajouté');
+                $this->session->set_flashdata('success', 'Votre logo a été ajouté');
                 redirect('Parametres/voirProfile', 'refresh');
             }
             else{
                 $this->session->set_flashdata('error', "Veuillez réessayer.");
                 redirect('Parametres/ajouterLogo', 'refresh');
+            }
+        }
+    }
+
+    public function modifierLogo(){
+        /** Count commande */
+        $boutique = $this->session->userdata('id_boutique');
+        $countCommandes = $this->Commande_model->countCommande($boutique);
+        $data['countCommandes'] = $countCommandes;
+
+        $data['id'] = $boutique;
+        /** Titre */
+        $titreAffiche = 'Modifier un logo';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/modifierLogo_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
+    }
+
+    public function verificationModificationLogo(){
+        //Config image
+        $config['upload_path'] = './uploads/logo';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = 2000;
+        $config['max_width'] = 400;
+        $config['max_height'] = 400;
+        $config['encrypt_name'] = TRUE;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload('userfile')) {
+            $data['error_message'] = $this->upload->display_errors();
+            /** Count commande */
+            $boutique = $this->session->userdata('id_boutique');
+            $countCommandes = $this->Commande_model->countCommande($boutique);
+            $data['countCommandes'] = $countCommandes;
+
+            /** Titre */
+            $titreAffiche = 'Modifier un logo';
+            $data['titreAffiche'] = $titreAffiche;
+
+            $this->load->view('utilisateur/templates/header_view', $data);
+            $this->load->view('utilisateur/pages/modifierLogo_view', $data);
+            $this->load->view('utilisateur/templates/footer_view');
+        }
+        else{
+            $id = $this->session->userdata('id_boutique');
+            $full_path = strtolower($this->upload->data('file_name'));
+
+            $data = array(
+                'logo_boutique' => $full_path
+            );
+
+            $updateLogo = $this->Boutiques_model->updateLogo($data, $id);
+
+            if($updateLogo == true){
+                $action = "Vous venez de modifier le logo de votre boutique";
+                $color = "warning";
+                $this->histoirque($action, $color);
+                $this->session->set_flashdata('success', 'Votre logo a été modifié');
+                redirect('Parametres/voirProfile', 'refresh');
+            }
+            else{
+                $this->session->set_flashdata('error', "Veuillez réessayer.");
+                redirect('Parametres/modifierLogo', 'refresh');
             }
         }
     }

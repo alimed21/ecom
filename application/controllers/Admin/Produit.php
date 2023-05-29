@@ -245,7 +245,6 @@ class Produit extends CI_Controller
 	public function upload_files($token){
 		$result = FALSE;
 		$cpt = count($_FILES ['file_upload'] ['name']);
-		// var_dump($cpt);die;
 		for ($i = 0; $i < $cpt; $i++){
 			$_FILES['userfile']['name']     = $_FILES['file_upload']['name'][$i];
 			$_FILES['userfile']['type']     = $_FILES['file_upload']['type'][$i];
@@ -298,28 +297,7 @@ class Produit extends CI_Controller
         $this->load->view('utilisateur/templates/footer_view');
     }
 
-    /**public function test(){
-        $token = "3fjQkYs";
-        $idBoutique = $this->session->userdata('id_boutique');
 
-        /** Images restant
-        $autresImages = $this->Produit_model->getAllImages($token);
-        $data['autresImages'] = $autresImages;
-
-        var_dump($autresImages);die;
-
-
-        if($autresImages != NULL){
-            foreach ($autresImages as $ph){
-                $output['photo_name'] = $ph->photo_name;
-            }
-            var_dump($output['photo_name']);
-        }
-        else{
-            $output['failed'] = '<font color="#ff0000" style="font-size: 20px;">Data not available</font>';
-            echo json_encode($output);
-        }
-    }**/
 
      public function getOtherPict(){
         $data = $this->input->get();
@@ -391,66 +369,29 @@ class Produit extends CI_Controller
                     $prixpromo = $this->input->post('prixpromo');
                     $subcate = $this->input->post('subcate');
 
-                    //Config image
-                    $config['upload_path'] = './uploads/produit';
-                    $config['allowed_types'] = 'jpg|png|jpeg';
-                    $config['max_size'] = 2000;
-                    $config['max_width'] = 2000;
-                    $config['max_height'] = 2000;
-                    $config['encrypt_name'] = TRUE;
-                    $this->load->library('upload', $config);
-                    $this->upload->initialize($config);
+                    $data = array(
+                        'prod' => $titre,
+                        'prix' => $prix,
+                        'description ' => $text,
+                        'promo ' => $promo,
+                        'prix_promo ' => $prixpromo,
+                        'quantite' => $quantite,
+                        'id_sscate' => $subcate
+                    );
 
-                    if (!$this->upload->do_upload('userfile')) {
-                        $data = array(
-                            'prod' => $titre,
-                            'prix' => $prix,
-                            'description ' => $text,
-                            'promo ' => $promo,
-                            'prix_promo ' => $prixpromo,
-                            'quantite' => $quantite,
-                            'id_sscate' => $subcate
-                        );
-                        $updateProduit = $this->Produit_model->updateProduit($data, $token);
+                    $updateProduit = $this->Produit_model->updateProduit($data, $token);
 
-                        if ($updateProduit = true) {
-                            $action = "Vous venez de modifier le produit n°".$token.".";
-                            $color = "warning";
-                            $this->histoirque($action, $color);
-                            $this->session->set_flashdata('success', 'Votre produit a été modifier');
-                            redirect('Admin/Produit/listeProduits', 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                            redirect('Admin/Produit/listeProduits');
-                        }
+                    if ($updateProduit = true) {
+                        $action = "Vous venez de modifier le produit n°".$token.".";
+                        $color = "warning";
+                        $this->histoirque($action, $color);
+                        $this->session->set_flashdata('success', 'Votre produit a été modifier');
+                        redirect('Admin/Produit/listeProduits', 'refresh');
+                    } else {
+                        $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                        redirect('Admin/Produit/listeProduits');
                     }
-                    else {
-                        $full_path = strtolower($this->upload->data('file_name'));
 
-                        $data = array(
-                            'prod' => $titre,
-                            'prix' => $prix,
-                            'description ' => $text,
-                            'promo ' => $promo,
-                            'prix_promo ' => $prixpromo,
-                            'quantite' => $quantite,
-                            'image ' => $full_path,
-                            'id_sscate' => $subcate
-                        );
-
-                        $updateProduit = $this->Produit_model->updateProduit($data, $token);
-
-                        if ($updateProduit = true) {
-                            $action = "Vous venez de modifier le produit n°".$token.".";
-                            $color = "warning";
-                            $this->histoirque($action, $color);
-                            $this->session->set_flashdata('success', 'Votre produit a été modifier');
-                            redirect('Admin/Produit/listeProduits', 'refresh');
-                        } else {
-                            $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                            redirect('Admin/Produit/listeProduits');
-                        }
-                    }
                 }
                 else{
 
@@ -468,65 +409,27 @@ class Produit extends CI_Controller
                 $prixpromo = $this->input->post('prixpromo');
                 $subcate = $this->input->post('subcate');
 
-                //Config image
-                $config['upload_path'] = './uploads/produit';
-                $config['allowed_types'] = 'jpg|png|jpeg';
-                $config['max_size'] = 2000;
-                $config['max_width'] = 2000;
-                $config['max_height'] = 2000;
-                $config['encrypt_name'] = TRUE;
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
+                $data = array(
+                    'prod' => $titre,
+                    'prix' => $prix,
+                    'description ' => $text,
+                    'promo ' => $promo,
+                    'prix_promo ' => $prixpromo,
+                    'quantite' => $quantite,
+                    'id_sscate' => $subcate
+                );
 
-                if (!$this->upload->do_upload('userfile')) {
-                    $data = array(
-                        'prod' => $titre,
-                        'prix' => $prix,
-                        'description ' => $text,
-                        'promo ' => $promo,
-                        'prix_promo ' => $prixpromo,
-                        'quantite' => $quantite,
-                        'id_sscate' => $subcate
-                    );
-                    $updateProduit = $this->Produit_model->updateProduit($data, $token);
+                $updateProduit = $this->Produit_model->updateProduit($data, $token);
 
-                    if ($updateProduit = true) {
-                        $action = "Vous venez de modifier le produit n°".$token.".";
-                        $color = "warning";
-                        $this->histoirque($action, $color);
-                        $this->session->set_flashdata('success', 'Votre produit a été modifier');
-                        redirect('Admin/Produit/listeProduits', 'refresh');
-                    } else {
-                        $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                        redirect('Admin/Produit/listeProduits');
-                    }
-                }
-                else{
-                    $full_path = strtolower($this->upload->data('file_name'));
-
-                    $data = array(
-                        'prod' => $titre,
-                        'prix' => $prix,
-                        'description ' => $text,
-                        'promo ' => $promo,
-                        'prix_promo ' => $prixpromo,
-                        'quantite' => $quantite,
-                        'image ' => $full_path,
-                        'id_sscate' => $subcate
-                    );
-
-                    $updateProduit = $this->Produit_model->updateProduit($data, $token);
-
-                    if ($updateProduit = true) {
-                        $action = "Vous venez de modifier le produit n°".$token.".";
-                        $color = "warning";
-                        $this->histoirque($action, $color);
-                        $this->session->set_flashdata('success', 'Votre produit a été modifier');
-                        redirect('Admin/Produit/listeProduits', 'refresh');
-                    } else {
-                        $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                        redirect('Admin/Produit/listeProduits');
-                    }
+                if ($updateProduit = true) {
+                    $action = "Vous venez de modifier le produit n°".$token.".";
+                    $color = "warning";
+                    $this->histoirque($action, $color);
+                    $this->session->set_flashdata('success', 'Votre produit a été modifier');
+                    redirect('Admin/Produit/listeProduits', 'refresh');
+                } else {
+                    $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                    redirect('Admin/Produit/listeProduits');
                 }
             }
         }
@@ -667,105 +570,96 @@ class Produit extends CI_Controller
             }
         }
     }
-/**
-    public function modifierProduit($token){
-        $idFour = $this->session->userdata('if_four');
-        /** Count commande
-        $countCommandes = $this->Commande_model->countCommande($idFour);
-        $data['countCommandes'] = $countCommandes;
-
-        $detailProduit = $this->Produit_model->getDetailProduit($token);
-        $data['detailProduit'] = $detailProduit;
-
-        $listesCategories = $this->Categories_model->getAllCategories();
-        $data['listesCategories'] = $listesCategories;
-
-        $this->load->view('user/templates/header_view', $data);
-        $this->load->view('user/pages/modifierProduit_view', $data);
-        $this->load->view('user/templates/footer_view');
-    }
- **/
 
 
-    public function modificationImagePrincipale($token){
-        $idFour = $this->session->userdata('if_four');
-        /** Count commande */
-        $countCommandes = $this->Commande_model->countCommande($idFour);
-        $data['countCommandes'] = $countCommandes;
 
-        $detailProduit = $this->Produit_model->getDetailProduit($token);
-        $data['detailProduit'] = $detailProduit;
+    public function modificationImages($token = null){
+        if($token == null){
+            redirect("Erreur/erreur404");
+        }
+        else{
+            /** Titre **/
+            $titreAffiche = 'Modification d\'un produit';
+            $data['titreAffiche'] = $titreAffiche;
 
-        $this->load->view('user/templates/header_view', $data);
-        $this->load->view('user/pages/modifierImagePrincipaleProduit_view', $data);
-        $this->load->view('user/templates/footer_view');
+            $idBoutique = $this->session->userdata('id_boutique');
+
+            /** Count commande */
+            $boutique = $this->session->userdata('id_boutique');
+            $countCommandes = $this->Commande_model->countCommande($boutique);
+            $data['countCommandes'] = $countCommandes;
+
+            $data['token'] = $token;
+
+            $this->load->view('utilisateur/templates/header_view', $data);
+            $this->load->view('utilisateur/pages/modifierImages_view', $data);
+            $this->load->view('utilisateur/templates/footer_view');
+        }
     }
 
-    public function modifierImage(){
+
+    public function updateImageProd(){
+
+        $token = $this->input->post("token");
+
         //Config image
         $config['upload_path'] = './uploads/produit';
         $config['allowed_types'] = 'jpg|png|jpeg';
         $config['max_size'] = 2000;
         $config['max_width'] = 2000;
-        $config['max_height'] = 1500;
+        $config['max_height'] = 2000;
         $config['encrypt_name'] = TRUE;
         $this->load->library('upload', $config);
         $this->upload->initialize($config);
 
-        $token = $this->input->post("token");
-
         if (!$this->upload->do_upload('userfile')) {
-            $idFour = $this->session->userdata('if_four');
+            $data['error_message_img'] = $this->upload->display_errors();
+
+            /** Titre **/
+            $titreAffiche = 'Modification d\'un produit';
+            $data['titreAffiche'] = $titreAffiche;
+
+            $idBoutique = $this->session->userdata('id_boutique');
+
             /** Count commande */
-            $countCommandes = $this->Commande_model->countCommande($idFour);
+            $boutique = $this->session->userdata('id_boutique');
+            $countCommandes = $this->Commande_model->countCommande($boutique);
             $data['countCommandes'] = $countCommandes;
-            $data['error_message'] = $this->upload->display_errors();
 
-            $detailProduit = $this->Produit_model->getDetailProduit($token);
-            $data['detailProduit'] = $detailProduit;
+            $data['token'] = $token;
 
-            $this->load->view('user/templates/header_view', $data);
-            $this->load->view('user/pages/modifierImagePrincipaleProduit_view', $data);
-            $this->load->view('user/templates/footer_view');
+            $this->load->view('utilisateur/templates/header_view', $data);
+            $this->load->view('utilisateur/pages/modifierImages_view', $data);
+            $this->load->view('utilisateur/templates/footer_view');
         }
         else{
-            //True
-            $full_path = $this->upload->data('file_name');
+            $full_path = strtolower($this->upload->data('file_name'));
 
             $data = array(
                 'image ' => $full_path
             );
 
-            $updateImageProduit = $this->Produit_model->updateImageProduit($data, $token);
+            $updateImgProd = $this->Produit_model->updateImgProd($data, $token);
 
-            if ($updateImageProduit = true) {
-                $this->session->set_flashdata('success', "L'image principale a bien été modifié");
+            if ($updateImgProd == TRUE) {
+                $action = "Vous venez de modifier l'image principale du produit n°".$token.".";
+                $color = "warning";
+                $this->histoirque($action, $color);
+                $this->session->set_flashdata('success', "L'image principale a bien été modifiée");
                 redirect('Admin/Produit/listeProduits', 'refresh');
             } else {
                 $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                redirect('Admin/Produit/modificationImagePrincipale'.$token);
+                redirect('Admin/Produit/modificationImages'.$token);
             }
         }
+
     }
 
-    public function modificationImages($token){
-        $idFour = $this->session->userdata('if_four');
-        /** Count commande */
-        $countCommandes = $this->Commande_model->countCommande($idFour);
-        $data['countCommandes'] = $countCommandes;
-        $detailProduit = $this->Produit_model->getDetailProduit($token);
-        $data['detailProduit'] = $detailProduit;
-
-        $this->load->view('user/templates/header_view', $data);
-        $this->load->view('user/pages/modifierImages_view', $data);
-        $this->load->view('user/templates/footer_view');
-    }
 
     public function updateUploadFiles(){
         $result = FALSE;
         $token = $this->input->post("token");
         $cpt = count($_FILES ['file_upload'] ['name']);
-        // var_dump($cpt);die;
         for ($i = 0; $i < $cpt; $i++){
             $_FILES['userfile']['name']     = $_FILES['file_upload']['name'][$i];
             $_FILES['userfile']['type']     = $_FILES['file_upload']['type'][$i];
@@ -776,41 +670,51 @@ class Produit extends CI_Controller
             $config = array(
                 'allowed_types' => 'jpg|jpeg|png',
                 'max_size'      => 3000,
-                'max_width'      => 1999,
-                'max_height'      => 1999,
+                'max_width'      => 2000,
+                'max_height'      => 2000,
                 'overwrite'     => true,
                 'encrypt_name'  => TRUE,
                 'upload_path' =>'uploads/images/'
             );
             $this->load->library('upload', $config);
             $this->upload->initialize($config);
-            $result = FALSE;
+
             if ( !$this->upload->do_upload('userfile')){
-               $data['error_message'] = $this->upload->display_errors();
 
-                $detailProduit = $this->Produit_model->getDetailProduit($token);
-                $data['detailProduit'] = $detailProduit;
+                $data['error_message'] = $this->upload->display_errors();
 
-                $idFour = $this->session->userdata('if_four');
+                /** Titre **/
+                $titreAffiche = 'Modification d\'un produit';
+                $data['titreAffiche'] = $titreAffiche;
+
+                $idBoutique = $this->session->userdata('id_boutique');
+
                 /** Count commande */
-                $countCommandes = $this->Commande_model->countCommande($idFour);
+                $boutique = $this->session->userdata('id_boutique');
+                $countCommandes = $this->Commande_model->countCommande($boutique);
                 $data['countCommandes'] = $countCommandes;
 
-                $this->load->view('user/templates/header_view', $data);
-                $this->load->view('user/pages/modifierImages_view', $data);
-                $this->load->view('user/templates/footer_view');
+                $data['token'] = $token;
+
+                $this->load->view('utilisateur/templates/header_view', $data);
+                $this->load->view('utilisateur/pages/modifierImages_view', $data);
+                $this->load->view('utilisateur/templates/footer_view');
+
             }else{
                 $final_files_data = $this->upload->data();
-                $this->Produit_model->othPhoto($final_files_data['file_name'], $token);
+                $this->Produit_model->updateothPhoto($final_files_data['file_name'], $token);
                 $result = TRUE;
-                if ($result == TRUE) {
-                    $this->session->set_flashdata('success', "Les images ont bien été modifiés");
-                    redirect('Admin/Produit/listeProduits', 'refresh');
-                } else {
-                    $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                    redirect('Admin/Produit/modificationImages'.$token);
-                }
             }
+        }
+        if ($result == TRUE) {
+            $action = "Vous venez de modifier les images secondaire du produit n°".$token.".";
+            $color = "warning";
+            $this->histoirque($action, $color);
+            $this->session->set_flashdata('success', "Les images ont bien été modifiés");
+            redirect('Admin/Produit/listeProduits', 'refresh');
+        } else {
+            $this->session->set_flashdata('error', 'Veuillez réessayer.');
+            redirect('index.php/Admin/Produit/modificationImages/'.$token);
         }
     }
 

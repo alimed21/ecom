@@ -101,6 +101,9 @@
             text-align: center;
             padding: 10px;
         }
+        .divErreur{
+            text-align: center;
+        }
     </style>
 
 </head>

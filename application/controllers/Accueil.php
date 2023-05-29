@@ -118,6 +118,9 @@ class Accueil extends CI_Controller
         $topBoutiques= $this->Accueil_model->getTopBoutiques();
         $data['topBoutiques'] = $topBoutiques;
 
+        /** Menu active */
+        $data['menuActive'] = "Accueil";
+
         /** Titre */
         $titreAffiche = 'Accueil';
         $data['titreAffiche'] = $titreAffiche;

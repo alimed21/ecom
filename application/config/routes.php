@@ -67,6 +67,9 @@ $route['Parametres/changerMotPasse'] = 'Admin/Parametres/motPasse';
 $route['Parametres/voirProfile'] = 'Admin/Parametres/voirProfile';
 $route['Parametres/ajouterLogo'] = 'Admin/Parametres/ajouterLogo';
 $route['Parametres/ajouterProfil'] = 'Admin/Parametres/ajouterProfil';
+$route['Produit/listeProduits'] = 'Admin/Produit/listeProduits';
+$route['Erreur/erreur404'] = 'Admin/Erreur/index';
+$route['Parametres/modifierLogo'] = 'Admin/Parametres/modifierLogo';
 
 
 /** Users */
@@ -81,4 +84,8 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 /** Boutique */
+
+/** Contact */
+
+
 

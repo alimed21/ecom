@@ -114,7 +114,7 @@
                             <div class="col-sm-9">
                                 <input class="form-control" name="file_upload[]" id="file" type="file" multiple>
                                 <p class="p-b-28">
-                                    Très important : les types des images autorisées sont : jpg, jpeg et png. Le nombre des images séléctionner sont aux nombres de 4.
+                                    Très important : les types des images autorisées sont : jpg, jpeg et png. Le nombre des images séléctionner sont aux nombres de 3.
                                 </p>
                             </div>
                         </div>

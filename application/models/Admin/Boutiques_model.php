@@ -121,4 +121,10 @@ class Boutiques_model extends CI_Model
         $this->db->update('boutiques', $data);
         return true;
     }
+
+    public function updateLogo($data, $id){
+        $this->db->where('id_boutique', $id );
+        $this->db->update('boutiques', $data);
+        return true;
+    }
 }
