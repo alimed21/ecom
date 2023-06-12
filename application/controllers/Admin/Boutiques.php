@@ -78,39 +78,49 @@ class Boutiques extends CI_Controller
 
         $resp = $emailAdresse;
 
+        $data['token'] = $token;
 
         /** Configuration email */
 
-        $message = "Veuillez cliquer sur ce lien pour <br>  <a href='".base_url('Inscription/?token=').$token."'>la création de votre compte.</a>";
 
         $sujet = "Création de votre compte";
 
+        $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
+        $message = $this->load->view('utilisateur/pages/email_view',$data,true);
+
+        # Config...
         # Config...
         $config = array(
+            'smtp_crypto' => 'tls',
             'protocol'  =>  'mail',
-            'smtp_host' => 'smtp.gmail.com',
-            'smtp_port' => 465,
-            'smtp_crypto' => 'ssl',
-            'smtp_user' => 'alimohamedeali@gmail.com',
-            'smtp_pass' => 'Home@2109',
+            'smtp_host' => 'relay-hosting.secureserver.net',
+            'smtp_port' => 25,
+            'smtp_user' => 'contact@worldtransitservices.com',
+            'smtp_pass' => 'moubaraksaada',
             'mailtype'  => 'html',
             'charset'   => 'utf8',
             'wordwrap'  => TRUE
         );
 
+
         $this->email->initialize($config);
         $this->load->library('email', $config);
-        $this->email->from('contact@gmail.com');
+        $this->email->from('contact@worldtransitservices.com');
         $this->email->to($resp);
         $this->email->subject($sujet);
         $this->email->message($message);
         $this->email->set_newline("\r\n");
         $result = $this->email->send();
+
+
+
         if($result){
-            echo "oui";
+            $this->session->set_flashdata('success', 'Boutique valider.');
+            redirect("Admin/Boutiques");
         }
         else{
-            echo $this->email->print_debugger();
+            $this->session->set_flashdata('error', 'Erreur survenu lors de l\'envoi du mail, veuillez réessayer.');
+            redirect("Admin/Boutiques");
         }
     }
 

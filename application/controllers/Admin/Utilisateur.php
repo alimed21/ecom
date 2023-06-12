@@ -83,8 +83,7 @@ class Utilisateur extends CI_Controller
             $validUtilisateur = $this->Utilisateurs_model->validUtilisateur($id, $data);
             if($validUtilisateur == true)
             {
-                $this->session->set_flashdata('success', 'Compte valider.');
-                redirect("Admin/Utilisateur/");
+                $this->sendMail($id);
             }
             else
             {
@@ -173,6 +172,55 @@ class Utilisateur extends CI_Controller
             }
         }
     }
+
+    public function sendMail($id){
+        /** Get email store */
+        $emailAdresse = $this->Utilisateurs_model->getEmail($id);
+
+        $resp = $emailAdresse;
+
+        /** Configuration email */
+        $sujet = "Validation de votre compte";
+
+        $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
+        $message = $this->load->view('utilisateur/pages/emailValidation_view',$data,true);
+
+        # Config...
+        # Config...
+        $config = array(
+            'smtp_crypto' => 'tls',
+            'protocol'  =>  'mail',
+            'smtp_host' => 'relay-hosting.secureserver.net',
+            'smtp_port' => 25,
+            'smtp_user' => 'contact@worldtransitservices.com',
+            'smtp_pass' => 'moubaraksaada',
+            'mailtype'  => 'html',
+            'charset'   => 'utf8',
+            'wordwrap'  => TRUE
+        );
+
+
+        $this->email->initialize($config);
+        $this->load->library('email', $config);
+        $this->email->from('contact@worldtransitservices.com');
+        $this->email->to($resp);
+        $this->email->subject($sujet);
+        $this->email->message($message);
+        $this->email->set_newline("\r\n");
+        $result = $this->email->send();
+
+
+
+        if($result){
+            $this->session->set_flashdata('success', 'Compte valider.');
+            redirect("Admin/Utilisateur");
+        }
+        else{
+            $this->session->set_flashdata('error', 'Erreur survenu lors de l\'envoi du mail, veuillez réessayer.');
+            redirect("Admin/Utilisateur");
+        }
+    }
+
 
     /** Historique */
     public function histoirque($action)

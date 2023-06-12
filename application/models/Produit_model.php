@@ -510,4 +510,55 @@ class Produit_model extends CI_Model
         $this->db->update("produit", $data);
         return true;
     }
+
+    /** Produit par boutique */
+    public function record_countProduitByBoutique($idBou){
+        $this->db->select ( 'COUNT(*) AS `numrows`' );
+        $this->db->where('id_boutique', $idBou);
+        $this->db->where('id_admin_valid is not null');
+        $this->db->where('date_valid is not null');
+        $this->db->where('id_admin_delete is null');
+        $this->db->where('date_delete is null');
+        $this->db->where('id_user_delete is null');
+        $this->db->where('date_user_delete is null');
+        $query = $this->db->get ( 'produit' );
+        return $query->row ()->numrows;
+    }
+
+    public function getAllProduitByBoutiques($limit, $start, $idBou) {
+        $this->db->limit($limit, $start);
+        $this->db->join('sscategorie as ssc', 'produit.id_sscate = ssc.id_ss_cate');
+
+        $this->db->where('produit.id_admin_valid is not null');
+        $this->db->where('produit.date_valid is not null');
+        $this->db->where('produit.id_admin_delete is null');
+        $this->db->where('produit.date_delete is null');
+        $this->db->where('produit.id_user_delete is null');
+        $this->db->where('produit.date_user_delete is null');
+
+        $this->db->where('ssc.id_admin_delete is null');
+        $this->db->where('ssc.date_delete is null');
+
+        $this->db->where('id_boutique', $idBou);
+
+        $this->db->order_by('date_prod', 'desc');
+        $query = $this->db->get("produit");
+
+
+
+        if ($query->num_rows() > 0) {
+
+            foreach ($query->result() as $row) {
+
+                $data[] = $row;
+
+            }
+
+            return $data;
+
+        }
+
+        return false;
+
+    }
 }

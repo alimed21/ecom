@@ -19,6 +19,26 @@ class Utilisateurs_model extends CI_Model
         return $query->result();
     }
 
+    public function getEmail($id){
+        $this->db->select('email');
+        $this->db->from('utilisateur');
+        $this->db->where('id_user', $id);
+        $this->db->where('id_admin_valid is not null');
+        $this->db->where('date_valid is not null');
+        $this->db->where('id_admin_delete is null');
+        $this->db->where('date_delete is null');
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            $row = $query->row();
+            return $row->email;
+        }
+        else
+        {
+            return false;
+        }
+    }
     public function getAllUserByShop($bou){
         $this->db->select('id_user, username, email, u.code_boutique, date_inscrit, nom_boutique, u.id_admin_valid, u.date_valid, u.id_admin_delete, u.date_delete');
         $this->db->from('utilisateur as u');
