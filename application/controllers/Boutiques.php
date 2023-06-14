@@ -319,25 +319,27 @@ class Boutiques extends CI_Controller
 
     public function sendemail($nom_boutique)
     {
-        # Config...
+         # Config...
         $config = array(
             'smtp_crypto' => 'tls',
             'protocol'  =>  'mail',
-            'smtp_host' => 'relay-hosting.secureserver.net',
+            'smtp_host' => '**************',
             'smtp_port' => 25,
-            'smtp_user' => 'contact@worldtransitservices.com',
-            'smtp_pass' => 'moubaraksaada',
+            'smtp_user' => '*************',
+            'smtp_pass' => '****************',
             'mailtype'  => 'html',
             'charset'   => 'utf8',
             'wordwrap'  => TRUE
         );
 
+
+
         $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
         $data['nomBoutique'] = $nom_boutique;
         $message = $this->load->view('page/email_view',$data,true);
         $sujet = "Inscription d'une boutique";
-        $emailfrom = 'info@worldtransitservices.com';
-        $emailto = 'alimohamedaliahmed@outlook.fr';
+        $emailfrom = '*****************';
+        $emailto = '***********************';
 
         $this->load->library('email', $config);
         $this->email->initialize($config);

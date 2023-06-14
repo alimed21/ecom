@@ -114,8 +114,8 @@ class Login extends CI_Controller
             'smtp_host' => 'mail.riyadexpress.com',
             'smtp_port' => 465,
             'smtp_crypto' => 'ssl',
-            'smtp_user' => 'contact@riyadexpress.com',
-            'smtp_pass' => 'Home@1234',
+            'smtp_user' => '***********************',
+            'smtp_pass' => '******************',
             'mailtype'  => 'html',
             'charset'   => 'utf8',
             'wordwrap'  => TRUE
@@ -124,7 +124,7 @@ class Login extends CI_Controller
 
         $this->email->initialize($config);
         $this->load->library('email', $config);
-        $this->email->from('contact@riyadexpress.com');
+        $this->email->from('********************');
         $this->email->to($email);
         $this->email->subject($sujet);
         $this->email->message($message);

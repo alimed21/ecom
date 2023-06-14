@@ -31,8 +31,6 @@ class Boutiques_model extends CI_Model
         $this->db->select('email_gerant');
         $this->db->from('boutiques');
         $this->db->where('code_boutique', $token);
-        $this->db->where('id_admin_valid is not null');
-        $this->db->where('date_valid is not null');
         $this->db->where('id_admin_delete is null');
         $this->db->where('date_delete is null');
         $query = $this->db->get();

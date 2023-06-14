@@ -57,12 +57,15 @@ class Boutiques extends CI_Controller
                 'date_valid' => $date_valid
             );
 
+            $emailAdresse = $this->Boutiques_model->getEmail($token);
+
+            $resp = $emailAdresse;
+
             $validBoutique = $this->Boutiques_model->validBoutique($data, $token);
             if($validBoutique == true)
             {
-                $this->sendMail($token);
-                /*$this->session->set_flashdata('success', 'Boutique valider.');
-                redirect("Admin/Produit/listeProduits");*/
+                $response = true;
+                $this->sendMail($token, $response, $resp);
             }
             else
             {
@@ -72,59 +75,7 @@ class Boutiques extends CI_Controller
         }
     }
 
-    public function sendMail($token){
-        /** Get email store */
-        $emailAdresse = $this->Boutiques_model->getEmail($token);
-
-        $resp = $emailAdresse;
-
-        $data['token'] = $token;
-
-        /** Configuration email */
-
-
-        $sujet = "Création de votre compte";
-
-        $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
-        $message = $this->load->view('utilisateur/pages/email_view',$data,true);
-
-        # Config...
-        # Config...
-        $config = array(
-            'smtp_crypto' => 'tls',
-            'protocol'  =>  'mail',
-            'smtp_host' => 'relay-hosting.secureserver.net',
-            'smtp_port' => 25,
-            'smtp_user' => 'contact@worldtransitservices.com',
-            'smtp_pass' => 'moubaraksaada',
-            'mailtype'  => 'html',
-            'charset'   => 'utf8',
-            'wordwrap'  => TRUE
-        );
-
-
-        $this->email->initialize($config);
-        $this->load->library('email', $config);
-        $this->email->from('contact@worldtransitservices.com');
-        $this->email->to($resp);
-        $this->email->subject($sujet);
-        $this->email->message($message);
-        $this->email->set_newline("\r\n");
-        $result = $this->email->send();
-
-
-
-        if($result){
-            $this->session->set_flashdata('success', 'Boutique valider.');
-            redirect("Admin/Boutiques");
-        }
-        else{
-            $this->session->set_flashdata('error', 'Erreur survenu lors de l\'envoi du mail, veuillez réessayer.');
-            redirect("Admin/Boutiques");
-        }
-    }
-
-    public function supprimerBoutique($token = null){
+     public function supprimerBoutique($token = null){
         if($token == null)
         {
             $this->session->set_flashdata('error', 'Erreur survenu, veuillez réessayer.');
@@ -140,11 +91,16 @@ class Boutiques extends CI_Controller
                 'date_delete' => $date_delete
             );
 
+            $emailAdresse = $this->Boutiques_model->getEmail($token);
+
+            $email = $emailAdresse;
+
             $supprimerBoutique = $this->Boutiques_model->supprimerBoutique($data, $token);
+
             if($supprimerBoutique == true)
             {
-                $this->session->set_flashdata('success', 'Boutique supprimer.');
-                redirect("Admin/Boutiques/");
+                $response = false;
+                $this->sendMail($token, $response, $email);
             }
             else
             {
@@ -153,4 +109,70 @@ class Boutiques extends CI_Controller
             }
         }
     }
+
+    public function sendMail($token, $res, $emailToSend){
+        $data['res'] = $res;
+
+        /** Configuration email */
+        if($res == true){
+            $sujet = "Création de votre compte";
+        }
+        else{
+            $sujet = "Inscription rejecter";
+        }
+
+        $data['sujet'] = $sujet;
+
+
+        $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
+        $message = $this->load->view('utilisateur/pages/email_view',$data,true);
+
+        # Config...
+        $config = array(
+            'smtp_crypto' => 'tls',
+            'protocol'  =>  'mail',
+            'smtp_host' => '**************',
+            'smtp_port' => 25,
+            'smtp_user' => '*************',
+            'smtp_pass' => '****************',
+            'mailtype'  => 'html',
+            'charset'   => 'utf8',
+            'wordwrap'  => TRUE
+        );
+
+
+        $this->email->initialize($config);
+        $this->load->library('email', $config);
+        $this->email->from('************************');
+        $this->email->to($emailToSend);
+        $this->email->subject($sujet);
+        $this->email->message($message);
+        $this->email->set_newline("\r\n");
+        $result = $this->email->send();
+
+
+
+
+
+        if($result){
+            if($res == true){
+                $this->session->set_flashdata('success', 'Boutique valider.');
+                redirect("Admin/Boutiques");
+            }
+            else{
+                $this->session->set_flashdata('success', 'Boutique rejecter.');
+                redirect("Admin/Boutiques/");
+            }
+
+        }
+        else{
+           /** var_dump('non');die;
+            $pr = $this->email->print_debugger();
+            var_dump($pr);die;**/
+            $this->session->set_flashdata('error', 'Erreur survenu lors de l\'envoi du mail, veuillez réessayer.');
+            redirect("Admin/Boutiques");
+        }
+    }
+
+
 }

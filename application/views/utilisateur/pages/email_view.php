@@ -258,7 +258,7 @@
 
                     <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
 
-                        <h2 style="margin: 0; font-weight: 700; letter-spacing: -1px; line-height: 48px;">Création de votre compte</h2>
+                        <h2 style="margin: 0; font-weight: 700; letter-spacing: -1px; line-height: 48px;"><?= $sujet;?></h2>
 
                     </td>
 
@@ -291,9 +291,16 @@
 
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                         <p>Bonjour Mr ou Mme, </p>
-                        <p>
-                            Nous venons de valider votre boutique, veuillez cliquer sur le lien suivant pour créer votre compte. <br> Cliquer <a href="<?= base_url();?>Inscription/index/<?= $token;?>" target="_blank">ici</a>.
-                        </p>
+                        <?php if($res == true):?>
+                                 <p>
+                                    Nous venons de valider votre boutique, veuillez cliquer sur le lien suivant pour créer votre compte. <br> Cliquer <a href="<?= base_url();?>Inscription/index/<?= $token;?>" target="_blank">ici</a>.
+                                </p>
+                        <?php else:?>
+                                <p>
+                                    Nous venons de rejecter l'inscription de votre boutique, veuillez nous contactez pour vous expliquer la raison.
+                                </p>
+                        <?php endif;?>
+
                     </td>
 
                 </tr>
