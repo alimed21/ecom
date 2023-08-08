@@ -7,6 +7,7 @@ class TableauBord extends CI_Controller
     {
         parent::__construct();
         $this->load->model("Admin/Produit_model");
+        $this->load->model("Admin/Dashbord_model");
         $this->load->model("Admin/Login_model");
         $this->load->model('Admin/Categories_model');
         $this->load->model('Admin/Commande_model');
@@ -19,88 +20,85 @@ class TableauBord extends CI_Controller
     }
 
     public function index(){
-        /** Compter le stock */
-        $idFour = $this->session->userdata('id_four');
-        $promo = "oui";
-        $stock = $this->Produit_model->countAllProduitByFournisseur($idFour);
-        $data['stock'] = $stock;
+        /** Titre **/
+        $titreAffiche = 'Tableau de bord';
+        $data['titreAffiche'] = $titreAffiche;
 
-        /** 5 dernières produits ajouter */
-        $lastProduits = $this->Produit_model->getLast5Produit($idFour);
-        $data['lastProduits'] = $lastProduits;
+        $idBoutique = $this->session->userdata('id_boutique');
 
-        /** Compteur montant total en terme de prix */
-        $totalPrix = $this->Produit_model->countAllPrixByProduitByFournisseur($idFour);
-        $data['totalPrix'] = $totalPrix;
+        /** Total vendu **/
+        $totalVendu = $this->Dashbord_model->totalVendu($idBoutique);
+        $data['totalVendu'] = $totalVendu;
 
-        /** Compteur montant total en terme de quantiter */
-        $totalQuantite = $this->Produit_model->countAllQuantiteByProduitByFournisseur($idFour);
-        $data['totalQuantite'] = $totalQuantite;
+        /** Total client **/
+        $totalClient = $this->Dashbord_model->totalClient($idBoutique);
+        $data['totalClient'] = $totalClient;
 
-        /** Compteur montant total en terme de produit */
-        $totalProduit = $this->Produit_model->countAllProduitByProduitByFournisseur($idFour);
-        $data['totalProduit'] = $totalProduit;
+        /** Total produit **/
+        $promo = 'non';
+        $totalProduit = $this->Dashbord_model->totalProduit($idBoutique, $promo);
+        $proNonPromo = $totalProduit->totalProduit;
 
-        /** Compteur montant total promo en terme de prix */
-        $totalPrixPromo = $this->Produit_model->countAllPrixPromo($idFour, $promo);
-        $data['totalPrixPromo'] = $totalPrixPromo;
+        /** Total produit promo **/
+        $promo = 'oui';
+        $totalProduitPromo = $this->Dashbord_model->totalProduitPromo($idBoutique, $promo);
+        $proPromo = $totalProduitPromo->totalProduitPromo;
 
-        /** Compteur montant total promo en terme de quantiter */
-        $totalQuantitePromo = $this->Produit_model->countAllQuantitePromo($idFour, $promo);
-        $data['totalQuantitePromo'] = $totalQuantitePromo;
+        /** Total investi **/
+        $produitTotal=$proNonPromo+$proPromo;
+        $data['produitTotal'] = $produitTotal;
 
-        /** Compteur montant total promo en terme de produit */
-        $totalProduitPromo = $this->Produit_model->countAllProduitPromo($idFour, $promo);
-        $data['totalProduitPromo'] = $totalProduitPromo;
+        /** Total des vends **/
+        $totalVente = $this->Dashbord_model->totalVente($idBoutique);
+        $data['totalVente'] = $totalVente;
 
-        /** Count commande */
-        $countCommandes = $this->Commande_model->countCommande($idFour);
-        $data['countCommandes'] = $countCommandes;
+        /** Total des produit en stock **/
+        $totalStock = $this->Dashbord_model->totalStock($idBoutique);
+        $data['totalStock'] = $totalStock;
 
-        /** Compteur client par fournisseur */
-        $countClient = $this->Produit_model->countAllClientByFour($idFour);
-        $data['countClient'] = $countClient;
+        /** Total des produits vendu **/
+        $totalStockVendu = $this->Dashbord_model->totalStockVendu($idBoutique);
+        $data['totalStockVendu'] = $totalStockVendu;
 
+        /** Total des commande par mois **/
+        $cmdMois = $this->Dashbord_model->commandeParMois($idBoutique);
+        $data['cmdMois'] = $cmdMois;
 
-        $this->load->view('user/templates/header_view', $data);
-        $this->load->view('user/pages/dashbord', $data);
-        $this->load->view('user/templates/footer_view');
-    }
+        /** Total des commande **/
+        $cmdTotal = $this->Dashbord_model->commandesTotal($idBoutique);
+        $data['cmdTotal'] = $cmdTotal;
 
-    public function satistique(){
-        $idFour = $this->session->userdata('id_four');
-        $homme = 'H';
-        $femme = 'F';
-        $Homme = 1;
-        $Femme = 2;
-        $Enfant = 3;
-        $Autre = 4;
-        /** Count commande */
-        $countCommandes = $this->Commande_model->countCommande($idFour);
-        $data['countCommandes'] = $countCommandes;
+        /** Les commandes en attend */
+        $listeCommande = $this->Dashbord_model->listeCommande($idBoutique);
+        $data['listeCommande'] = $listeCommande;
+
+        /**Historique de l'utilisateur **/
+        $id_user = $this->session->userdata('id_user');
+        $historyUser = $this->Login_model->historyUser2($id_user);
+        $data['historyUser'] = $historyUser;
 
         /** Commande par genre */
-        $commandeGenreH = $this->Commande_model->countCommandeGenreHomme($homme, $idFour);
+        $homme = "Homme";
+        $femme = "Femme";
+        $commandeGenreH = $this->Commande_model->countCommandeGenreHomme($homme, $idBoutique);
         $data['commandeGenreH'] = $commandeGenreH;
 
-        $commandeGenreF = $this->Commande_model->countCommandeGenreFemme($femme, $idFour);
+        $commandeGenreF = $this->Commande_model->countCommandeGenreFemme($femme, $idBoutique);
         $data['commandeGenreF'] = $commandeGenreF;
 
-        /** Type de stock */
-        $stockHomme = $this->Produit_model->countStockHomme($idFour, $Homme);
-        $data['stockHomme'] = $stockHomme;
+        //Commande par mois
+        $commandeMois = $this->Commande_model->countCommandeParMois($idBoutique);
+        $data['commandeMois'] = $commandeMois;
 
-        $stockFemme = $this->Produit_model->countStockFemme($idFour, $Femme);
-        $data['stockFemme'] = $stockFemme;
+        /** Count commande */
+        $boutique = $this->session->userdata('id_boutique');
+        $countCommandes = $this->Commande_model->countCommande($boutique);
+        $data['countCommandes'] = $countCommandes;
 
-        $stockEnfant = $this->Produit_model->countStockEnfant($idFour, $Enfant);
-        $data['stockEnfant'] = $stockEnfant;
 
-        $stockAutre = $this->Produit_model->countStockAutre($idFour, $Autre);
-        $data['stockAutre'] = $stockAutre;
-
-        $this->load->view('user/templates/header_view', $data);
-        $this->load->view('user/pages/statistique', $data);
-        $this->load->view('user/templates/footer_view');
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/dashbord_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
     }
+
 }

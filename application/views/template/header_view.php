@@ -100,9 +100,9 @@
                     </div>
                     <div class="mainmenu pull-left">
                         <ul class="nav navbar-nav collapse navbar-collapse">
-                            <li><a href="<?= base_url();?>" <?php if ( $menuActive == 'Accueil' ): ?> class="active"<?php endif; ?>>Accueil</a></li>
+                            <li><a href="<?= base_url();?>">Accueil</a></li>
                             <li>
-                                <a href="<?= base_url();?>#">
+                                <a href="<?= base_url();?>Boutiques">
                                     Boutiques
                                 </a>
                             </li>
@@ -116,7 +116,7 @@
                                     <?php endif;?>
                                 </ul>
                             </li>
-                            <li><a href="<?= base_url();?>Contact" <?php if ($menuActive == "Contact"): ?> class="active"<?php endif; ?>>Contact</a></li>
+                            <li><a href="<?= base_url();?>Contact">Contact</a></li>
                         </ul>
                     </div>
                 </div>

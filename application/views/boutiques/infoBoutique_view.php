@@ -68,7 +68,12 @@
                                         <?php echo $error_message; ?>
                                     </div>
                                 <?php endif; ?>
-                                <form action="<?php echo base_url();?>ajoutBoutique" method="post"  enctype="multipart/form-data">
+                                <?php if (isset($erreur_message)):?>
+                                    <div class="alert alert-danger" role="alert">
+                                        <?php echo $erreur_message; ?>
+                                    </div>
+                                <?php endif; ?>
+                                <form action="<?php echo base_url();?>Boutiques/ajoutBoutique" method="post"  enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">

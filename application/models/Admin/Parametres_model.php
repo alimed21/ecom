@@ -70,4 +70,10 @@ class Parametres_model extends CI_Model
         $this->db->insert('profil_user', $data);
         return ($this->db->affected_rows() != 1) ? false : true;
     }
+
+    public function updatePhotoProfil($data, $id){
+        $this->db->where('id_user', $id);
+        $this->db->update('profil_user', $data);
+        return true;
+    }
 }

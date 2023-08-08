@@ -123,6 +123,9 @@ class Boutiques extends CI_Controller
 
         $data['sujet'] = $sujet;
 
+        $numBou = $token;
+        $data['numBou'] = $numBou;
+
 
         $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
         $message = $this->load->view('utilisateur/pages/email_view',$data,true);

@@ -42,7 +42,7 @@ class LoginAdmin extends CI_Controller
                     );
                 }
                 $this->session->set_userdata($session_data);
-                redirect("Dashboard");
+                redirect("Admin/Boutiques");
             }
             else
             {

@@ -97,4 +97,19 @@ class Commande_model extends CI_Model
         $this->db->update('produit', $data);
         return true;
     }
+
+    public function countCommandeParMois()
+    {
+        $this->db->select('COUNT(id_cmd) as count, DATE_FORMAT(date_cmd,"%m") as month');
+        $this->db->from('commande');
+        $this->db->where('valid_client_cmd is not null');
+        $this->db->where('date_valid_client is not null');
+        $this->db->where('date_delete_cmd is null');
+        $this->db->where('id_four_delete_cmd is null');
+        $this->db->group_by('DATE_FORMAT(date_cmd,"%m")');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    
 }

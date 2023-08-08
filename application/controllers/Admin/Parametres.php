@@ -98,7 +98,7 @@ class Parametres extends CI_Controller
                         $action = "Vous venez de modifier votre mot de passe.";
                         $color = "warning";
                         $this->histoirque($action, $color);
-                        redirect('Admin/Login/logout');
+                        redirect('DeconnexionUtilisateur');
                     }
                     else{
                         $this->session->set_flashdata('error', 'Veuillez réessayer.');
@@ -405,6 +405,74 @@ class Parametres extends CI_Controller
 
     }
 
+    /***Modification de l'image du profil****/
+    public function modifierImageProfile(){
+        /** Count commande */
+        $boutique = $this->session->userdata('id_boutique');
+        $countCommandes = $this->Commande_model->countCommande($boutique);
+        $data['countCommandes'] = $countCommandes;
+
+        /** Titre */
+        $titreAffiche = 'Modification de la photo de votre profile';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('utilisateur/templates/header_view', $data);
+        $this->load->view('utilisateur/pages/modifierPhotoProfil_view', $data);
+        $this->load->view('utilisateur/templates/footer_view');
+    }
+
+    public function modificationPhotoProfil(){
+        //Config image
+        $config['upload_path'] = './uploads/profile';
+        $config['allowed_types'] = 'jpg|png|jpeg';
+        $config['max_size'] = 2000;
+        $config['max_width'] = 400;
+        $config['max_height'] = 400;
+        $config['encrypt_name'] = TRUE;
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload('userfile')) {
+            $data['error_message'] = $this->upload->display_errors();
+            
+            /** Count commande */
+            $boutique = $this->session->userdata('id_boutique');
+            $countCommandes = $this->Commande_model->countCommande($boutique);
+            $data['countCommandes'] = $countCommandes;
+
+            /** Titre */
+            $titreAffiche = 'Modification de la photo de votre profile';
+            $data['titreAffiche'] = $titreAffiche;
+
+            $this->load->view('utilisateur/templates/header_view', $data);
+            $this->load->view('utilisateur/pages/modifierPhotoProfil_view', $data);
+            $this->load->view('utilisateur/templates/footer_view');
+        }
+        else{
+                $id_user = $this->session->userdata('id_user');
+                $full_path = strtolower($this->upload->data('file_name'));
+
+                $data = array(
+
+                    'photo'         => $full_path
+                );
+
+                $updatePhotoProfil = $this->Parametres_model->updatePhotoProfil($data, $id_user);
+
+                if ($updatePhotoProfil == true)
+                {
+                    $action = "Vous venez de modifier la photo de votre profile";
+                    $color = "warning";
+                    $this->histoirque($action, $color);
+                    $this->session->set_flashdata('sucess', "Votre photo de profile a bien été modifiée");
+                    redirect('Parametres/voirProfile');
+                }
+                else{
+                    $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                    redirect('Parametres/voirProfile');
+                }
+            }
+    }
     /** INformation boutique */
     public function informationBoutique(){
         $id_four = $this->session->userdata('id_four');

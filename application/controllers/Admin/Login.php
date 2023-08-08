@@ -54,7 +54,7 @@ class Login extends CI_Controller
                 $action = "Connexion avec succès";
                 $color = "success";
                 $this->histoirque($action, $color);
-                redirect("Admin/Produit");
+                redirect("Produits/liste");
             }
             else
             {

@@ -94,4 +94,38 @@ class Boutiques_model extends CI_Model
             return false;
         }
     }
+
+    public function addOtp($data, $email){
+        $this->db->where('email_gerant', $email );
+        $this->db->update('boutiques', $data);
+        return true;
+    }
+
+    public function supprimerBoutiques($email){
+        $this->db->where('email_gerant', $email);
+        $this->db->delete('boutiques');
+        return true;
+    }
+
+    public function verificationOtp($code, $email){
+        $this->db->from('boutiques');
+        $this->db->where('otp', $code);
+        $this->db->where('email_gerant', $email);
+        $this->db->where('id_admin_valid is null');
+        $this->db->where('date_valid is null');
+        $this->db->where('id_admin_delete is null');
+        $this->db->where('date_delete is null');
+        $this->db->limit(1);
+
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

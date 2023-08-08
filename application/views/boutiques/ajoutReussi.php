@@ -46,7 +46,7 @@
             <img src="<?php echo base_url();?>assets/images/error/404.png" class="img-fluid mb-4 w-50" alt="">
             <h2 class="mb-0 mt-4 text-white">Les données de votre boutique est bien enregistré.</h2>
             <p class="mt-2 text-white">Nous allons vous envoyer un mail prochainement, merci d'avoir utilisé notre solution.</p>
-            <a class="btn bg-white text-primary d-inline-flex align-items-center" href="../index.html">Retour à l'accueil</a>
+            <a class="btn bg-white text-primary d-inline-flex align-items-center" href="<?= base_url();?>">Retour à l'accueil</a>
         </div>
         <div class="box">
             <div class="c xl-circle">

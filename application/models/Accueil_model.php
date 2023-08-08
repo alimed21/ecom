@@ -37,33 +37,7 @@ class Accueil_model extends CI_Model
         $this->db->where('p.id_user_delete is null');
         $this->db->where('p.date_user_delete is null');
         $this->db->order_by("date_prod", "desc");
-        $this->db->limit(3);
-
-        $query = $this->db->get();
-
-        if($query->num_rows() > 0)
-        {
-            return $query->result();
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public function getNewArticles2($promotion)
-    {
-        $this->db->select('id_prod, prod, prix, p.token, date_prod, titre_ss_cate, image');
-        $this->db->from('produit as p');
-        $this->db->join('sscategorie as ssc', 'p.id_sscate = ssc.id_ss_cate');
-        $this->db->where('p.promo', $promotion);
-        $this->db->where('p.date_valid is not null');
-        $this->db->where('p.id_admin_valid is not null');
-        $this->db->where('p.id_admin_delete is null');
-        $this->db->where('p.date_delete is null');
-        $this->db->where('p.id_user_delete is null');
-        $this->db->where('p.date_user_delete is null');
-        $this->db->order_by("date_prod", "desc");
-        $this->db->limit(6,3);
+        $this->db->limit(6);
 
         $query = $this->db->get();
 

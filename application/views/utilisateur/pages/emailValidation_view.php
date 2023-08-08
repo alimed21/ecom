@@ -292,7 +292,7 @@
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                         <p>Bonjour Mr ou Mme, </p>
                         <p>
-                            Nous venons de valider votre compte, veuillez vous connectez sur compte pn cliquant <a href="<?= base_url();?>Login" target="_blank">ici</a>.
+                            Nous venons de valider votre compte, veuillez vous connectez sur compte en cliquant <a href="<?= base_url();?>Login" target="_blank">ici</a>.
                         </p>
                     </td>
 

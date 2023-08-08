@@ -15,7 +15,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form class="form-horizontal" action="<?php echo base_url();?>Admin/Produit/updateImageProd" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="<?php echo base_url();?>Produits/modifierImageProd" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" name="token" value="<?= $token;?>">
 
@@ -53,7 +53,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form class="form-horizontal" action="<?php echo base_url();?>Admin/Produit/updateUploadFiles" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="<?php echo base_url();?>Produits/modifierUploadFiles" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" name="token" value="<?= $token;?>">
 

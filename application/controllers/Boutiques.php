@@ -251,10 +251,10 @@ class Boutiques extends CI_Controller
     public function ajoutBoutique()
     {
         $this->form_validation->set_rules('nom_boutique', "nom de la boutique", 'trim|required|is_unique[boutiques.nom_boutique]');
-        $this->form_validation->set_rules('num_boutique', "numéro de téléphone de la boutique", 'trim|required');
+        $this->form_validation->set_rules('num_boutique', "numéro de téléphone de la boutique", 'trim|required|min_length[8]|max_length[8]');
         $this->form_validation->set_rules('adr_boutique', "adresse de la boutique", 'trim|required');
         $this->form_validation->set_rules('nom_gerant', "nom du gérant", 'trim|required');
-        $this->form_validation->set_rules('num_gerant', "numéro de téléphone du gérant", 'trim|required');
+        $this->form_validation->set_rules('num_gerant', "numéro de téléphone du gérant", 'trim|required|is_unique[boutiques.tele_gerant]|min_length[8]|max_length[8]');
         $this->form_validation->set_rules('email_gerant', "l'adresse électronique du gérant", 'trim|required|valid_email|is_unique[boutiques.email_gerant]');
         $this->form_validation->set_rules('compte_bancaire', "numéro de compte bancaire", 'trim|required|is_unique[boutiques.compte_bancaire]');
         $this->form_validation->set_rules('nom_banque', "nom de la banque", 'trim|required');
@@ -305,58 +305,168 @@ class Boutiques extends CI_Controller
 
                 $ajoutBoutique = $this->Boutiques_model->addBoutique($data);
                 if ($ajoutBoutique = true) {
-                    $this->sendemail($nom_boutique);
+                    //$this->sendemail($nom_boutique);
                     //redirect('ajoutReussi');
+                    // Generate OTP
+                    $otp = $this->generate_otp();
+
+                    $data = [
+                        'otp'	=> $otp,
+                    ];
+                    //Inserer OTP
+                    $inserOTP = $this->Boutiques_model->addOtp($data, $email_gerant);
+
+                    if($inserOTP == true){
+
+                        //send otp via email
+                        $sendOTP = $this->sendOTP($email_gerant, $otp);
+
+                        if($sendOTP == true){
+                            //Confirmation otp
+                            $essaie = null;
+                            $erreur_message = null;
+                            $confirmationOTP = $this->confirmationOtp($email_gerant, $essaie, $erreur_message);
+                        }
+                        else{
+                            $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                            redirect('Boutique/inscriptionBoutique');
+                        }
+
+                    }
+                    else{
+                        $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                        redirect('Boutique/inscriptionBoutique');
+                    }
+
                 } else {
                     $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                    redirect('Boutique');
+                    redirect('Boutique/inscriptionBoutique');
                 }
+
             }
         } else {
-            $this->index();
+            $this->inscriptionBoutique();
         }
+
     }
 
-    public function sendemail($nom_boutique)
-    {
-         # Config...
+    public function generate_otp() {
+        $OTP 	=	rand(1,9);
+        $OTP 	.=	rand(0,9);
+        $OTP 	.=	rand(0,9);
+        $OTP 	.=	rand(0,9);
+        $OTP 	.=	rand(0,9);
+        $OTP 	.=	rand(0,9);
+        return $OTP;
+    }
+    public function sendOTP($email, $otp){
+
+
+        $sujet = "Votre code de confirmation";
+        $message = "Voici votre code de confirmation ".$otp." ne partager pas avec personne.";
+        # Config...
         $config = array(
             'smtp_crypto' => 'tls',
             'protocol'  =>  'mail',
-            'smtp_host' => '**************',
+            'smtp_host' => 'relay-hosting.secureserver.net',
             'smtp_port' => 25,
-            'smtp_user' => '*************',
-            'smtp_pass' => '****************',
+            'smtp_user' => 'contact@worldtransitservices.com',
+            'smtp_pass' => 'moubaraksaada',
             'mailtype'  => 'html',
             'charset'   => 'utf8',
             'wordwrap'  => TRUE
         );
 
 
-
-        $data['contente']="La première plateforme e-commerce pour les Djiboutiens/ennes";
-        $data['nomBoutique'] = $nom_boutique;
-        $message = $this->load->view('page/email_view',$data,true);
-        $sujet = "Inscription d'une boutique";
-        $emailfrom = '*****************';
-        $emailto = '***********************';
-
-        $this->load->library('email', $config);
         $this->email->initialize($config);
-        $this->email->from($emailfrom);
-        $this->email->to($emailto);
+        $this->load->library('email', $config);
+        $this->email->from('contact@worldtransitservices.com');
+        $this->email->to($email);
         $this->email->subject($sujet);
         $this->email->message($message);
-        $this->email->set_newline(" \ r \ n ");
+        $this->email->set_newline("\r\n");
         $result = $this->email->send();
+
         if($result){
-            $this->ajoutBoutiqueReussi();
+            return true;
         }
         else{
-            var_dump($this->email->print_debugger());die();
-            echo $this->email->print_debugger();
+            return false;
+        }
+    }
+
+    public function confirmationOtp($email, $essaie = null, $erreur_message = null){
+
+        if($essaie == null){
+            $essaie = 0;
+        }
+        else{
+            $essaie = $essaie;
         }
 
+        if($essaie == 3){
+            $suppressionDonnée = $this->Boutiques_model->supprimerBoutiques($email);
+
+            if($suppressionDonnée == true){
+                $this->boutiqueRejecter();
+            }
+            else{
+                $this->session->set_flashdata('error', 'Veuillez réessayer.');
+                redirect('Boutique');
+            }
+        }
+        else if($essaie < 3){
+            /** Email */
+            $data['email'] = $email;
+
+            /** Essaie */
+            $data['essaie'] = $essaie;
+
+            /** message erreur */
+            $data['erreur_message'] = $erreur_message;
+
+            /** Titre */
+            $titreAffiche = 'Confirmation du code secret';
+            $data['titreAffiche'] = $titreAffiche;
+
+            $this->load->view('boutiques/confirmation_view', $data);
+        }
+        else{
+            $this->boutiqueRejecter();
+        }
+    }
+
+    public function codeOtp(){
+        $this->form_validation->set_rules('code_otp', "code secret", 'trim|required');
+        $email = $this->input->post('email');
+        $essaie = $this->input->post('essaie');
+
+        if ($this->form_validation->run() == true) {
+            //Si tous les champs ont bien été saisies
+            $code = $this->input->post('code_otp');
+
+            $verificationOtp = $this->Boutiques_model->verificationOtp($code, $email);
+
+            if($verificationOtp == true) {
+                $this->ajoutBoutiqueReussi();
+            }else {
+                $essaie = $essaie + 1;
+                $erreur_message = "Le code que vous avez fourni est erroné, veuillez réessayer";
+                $this->confirmationOtp($email, $essaie, $erreur_message);
+            }
+        } else {
+            $erreur_message = null;
+            $this->confirmationOtp($email, $essaie, $erreur_message);
+        }
+    }
+
+
+    public function boutiqueRejecter(){
+        /** Titre */
+        $titreAffiche = 'Reject de votre boutique';
+        $data['titreAffiche'] = $titreAffiche;
+
+        $this->load->view('boutiques/rejectBoutique', $data);
     }
 
     public function ajoutBoutiqueReussi()

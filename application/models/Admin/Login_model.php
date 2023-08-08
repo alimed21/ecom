@@ -53,6 +53,25 @@ class Login_model extends CI_Model
         }
     }
 
+    public function historyUser2($iduser){
+        $this->db->select('id_his, action_user, his_color, date_his');
+        $this->db->from('his_user');
+        $this->db->where('id_user', $iduser);
+        $this->db->order_by("date_his", "desc");
+        $this->db->limit(5);
+
+        $query = $this->db->get();
+
+        if($query->num_rows() > 0)
+        {
+            return $query->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function verifyPassword($id, $password){
         $this->db->select('password');
         $this->db->from('utilisateur as u');

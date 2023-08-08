@@ -138,7 +138,7 @@ class Administrateur extends CI_Controller
         $this->load->view('admin/pages/tableaudebord_view', $data);
         $this->load->view('admin/templates/footer_view');
     }
-/**  Gestion des rôles */
+/**  Gestion des rôles 
     public function index()
     {
         $listesRoles = $this->Roles_model->getAllRoles();
@@ -234,7 +234,7 @@ class Administrateur extends CI_Controller
             $this->session->set_flashdata('error', 'Veuillez réessayer.');
             redirect('Admin/Administrateur/');
         }
-    }
+    }*/
 
     /** Gestion categories */
     public function ajouterCategorie(){

@@ -293,7 +293,7 @@
                         <p>Bonjour Mr ou Mme, </p>
                         <?php if($res == true):?>
                                  <p>
-                                    Nous venons de valider votre boutique, veuillez cliquer sur le lien suivant pour créer votre compte. <br> Cliquer <a href="<?= base_url();?>Inscription/index/<?= $token;?>" target="_blank">ici</a>.
+                                    Nous venons de valider votre boutique, veuillez cliquer sur le lien suivant pour créer votre compte. <br> Cliquer <a href="<?= base_url();?>Inscription/index/<?= $numBou;?>" target="_blank">ici</a>.
                                 </p>
                         <?php else:?>
                                 <p>

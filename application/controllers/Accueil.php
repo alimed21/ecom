@@ -73,9 +73,6 @@ class Accueil extends CI_Controller
         $nouveauArticles = $this->Accueil_model->getNewArticles($promotion);
         $data['nouveauArticles'] = $nouveauArticles;
 
-        $nouveauArticlesSecond = $this->Accueil_model->getNewArticles2($promotion);
-        $data['nouveauArticlesSecond'] = $nouveauArticlesSecond;
-
         $categories = $this->Categorie_model->getAllCategorie();
         $data['categories'] = $categories;
 

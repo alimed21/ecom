@@ -142,16 +142,16 @@ class Produit extends CI_Controller
                                 $color = "primary";
                                 $this->histoirque($action, $color);
                                 $this->session->set_flashdata('success', 'Votre produit a été ajouté');
-                                redirect('Admin/Produit/listeProduits', 'refresh');
+                                redirect('Produits/liste', 'refresh');
                             }
                             else
                             {
                                 $this->session->set_flashdata('success', "Votre produit n'a pas été ajouté");
-                                redirect('Admin/Produit/listeProduits', 'refresh');
+                                redirect('Produits/liste', 'refresh');
                             }
                         } else {
                             $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                            redirect('Admin/Produit/listeProduits');
+                            redirect('Produits/liste');
                         }
                     }
                     else{
@@ -219,16 +219,16 @@ class Produit extends CI_Controller
                             $color = "primary";
                             $this->histoirque($action, $color);
                             $this->session->set_flashdata('success', 'Votre produit a été ajouté');
-                            redirect('Admin/Produit/listeProduits', 'refresh');
+                            redirect('Produits/liste', 'refresh');
                         }
                         else
                         {
                             $this->session->set_flashdata('success', "Votre produit n'a pas été ajouté");
-                            redirect('Admin/Produit/listeProduits', 'refresh');
+                            redirect('Produits/liste', 'refresh');
                         }
                     } else {
                         $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                        redirect('Admin/Produit/listeProduits');
+                        redirect('Produits/liste');
                     }
                 }
 
@@ -386,17 +386,17 @@ class Produit extends CI_Controller
                         $color = "warning";
                         $this->histoirque($action, $color);
                         $this->session->set_flashdata('success', 'Votre produit a été modifier');
-                        redirect('Admin/Produit/listeProduits', 'refresh');
+                        redirect('Produits/liste', 'refresh');
                     } else {
                         $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                        redirect('Admin/Produit/listeProduits');
+                        redirect('Produits/liste');
                     }
 
                 }
                 else{
 
                     $this->session->set_flashdata('error', 'Le champs prix promotion est obligatoire.');
-                    redirect('Admin/Produit/modifierProduit/'.$token);
+                    redirect('Produits/liste'.$token);
                 }
             }
             else{
@@ -426,10 +426,10 @@ class Produit extends CI_Controller
                     $color = "warning";
                     $this->histoirque($action, $color);
                     $this->session->set_flashdata('success', 'Votre produit a été modifier');
-                    redirect('Admin/Produit/listeProduits', 'refresh');
+                    redirect('Produits/liste', 'refresh');
                 } else {
                     $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                    redirect('Admin/Produit/listeProduits');
+                    redirect('Produits/liste');
                 }
             }
         }
@@ -505,12 +505,12 @@ class Produit extends CI_Controller
                         $this->produitNonValid($token);
                     } else {
                         $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                        redirect('Admin/Produit/modifierPrixQuantiterProduit'.$token);
+                        redirect('Produits/modifierPrixQuantite'.$token);
                     }
 
                 }else{
                     $this->session->set_flashdata('error', 'Le champs prix promotion est obligatoire.');
-                    redirect('Admin/Produit/modifierPrixQuantiterProduit/'.$token);
+                    redirect('Produits/modifierPrixQuantite/'.$token);
                 }
             }
             else{
@@ -532,7 +532,7 @@ class Produit extends CI_Controller
 
                 } else {
                     $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                    redirect('Admin/Produit/modifierPrixQuantiterProduit'.$token);
+                    redirect('Produits/modifierPrixQuantite/'.$token);
                 }
             }
         }
@@ -545,7 +545,7 @@ class Produit extends CI_Controller
         if($token == null)
         {
             $this->session->set_flashdata('error', 'Veuillez réessayer.');
-            redirect("Admin/Produit/listeProduits");
+            redirect("Produits/liste");
         }
         else
         {
@@ -563,10 +563,10 @@ class Produit extends CI_Controller
                 $color = "warning";
                 $this->histoirque($action, $color);
                 $this->session->set_flashdata('success', 'La quantité ou le prix de votre produit a été modifié');
-                redirect('Admin/Produit/listeProduits', 'refresh');
+                redirect('Produits/liste', 'refresh');
             } else {
                 $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                redirect('Admin/Produit/modifierPrixQuantiterProduit'.$token);
+                redirect('Produits/modifierPrixQuantite/'.$token);
             }
         }
     }
@@ -615,8 +615,8 @@ class Produit extends CI_Controller
         if (!$this->upload->do_upload('userfile')) {
             $data['error_message_img'] = $this->upload->display_errors();
 
-            /** Titre **/
-            $titreAffiche = 'Modification d\'un produit';
+            /** Titre */
+            $titreAffiche = 'Liste des produits';
             $data['titreAffiche'] = $titreAffiche;
 
             $idBoutique = $this->session->userdata('id_boutique');
@@ -626,10 +626,12 @@ class Produit extends CI_Controller
             $countCommandes = $this->Commande_model->countCommande($boutique);
             $data['countCommandes'] = $countCommandes;
 
-            $data['token'] = $token;
+
+            $listeProduitsUser = $this->Produit_model->getAllProduitByUser($idBoutique);
+            $data['listeProduitsUser'] = $listeProduitsUser;
 
             $this->load->view('utilisateur/templates/header_view', $data);
-            $this->load->view('utilisateur/pages/modifierImages_view', $data);
+            $this->load->view('utilisateur/pages/listeProduits_view', $data);
             $this->load->view('utilisateur/templates/footer_view');
         }
         else{
@@ -646,10 +648,10 @@ class Produit extends CI_Controller
                 $color = "warning";
                 $this->histoirque($action, $color);
                 $this->session->set_flashdata('success', "L'image principale a bien été modifiée");
-                redirect('Admin/Produit/listeProduits', 'refresh');
+                redirect('Produits/liste', 'refresh');
             } else {
                 $this->session->set_flashdata('error', 'Veuillez réessayer.');
-                redirect('Admin/Produit/modificationImages'.$token);
+                redirect('Produits/modifierImages/'.$token);
             }
         }
 
@@ -683,8 +685,8 @@ class Produit extends CI_Controller
 
                 $data['error_message'] = $this->upload->display_errors();
 
-                /** Titre **/
-                $titreAffiche = 'Modification d\'un produit';
+                /** Titre */
+                $titreAffiche = 'Liste des produits';
                 $data['titreAffiche'] = $titreAffiche;
 
                 $idBoutique = $this->session->userdata('id_boutique');
@@ -694,10 +696,12 @@ class Produit extends CI_Controller
                 $countCommandes = $this->Commande_model->countCommande($boutique);
                 $data['countCommandes'] = $countCommandes;
 
-                $data['token'] = $token;
+
+                $listeProduitsUser = $this->Produit_model->getAllProduitByUser($idBoutique);
+                $data['listeProduitsUser'] = $listeProduitsUser;
 
                 $this->load->view('utilisateur/templates/header_view', $data);
-                $this->load->view('utilisateur/pages/modifierImages_view', $data);
+                $this->load->view('utilisateur/pages/listeProduits_view', $data);
                 $this->load->view('utilisateur/templates/footer_view');
 
             }else{
@@ -711,10 +715,10 @@ class Produit extends CI_Controller
             $color = "warning";
             $this->histoirque($action, $color);
             $this->session->set_flashdata('success', "Les images ont bien été modifiés");
-            redirect('Admin/Produit/listeProduits', 'refresh');
+            redirect('Produits/liste', 'refresh');
         } else {
             $this->session->set_flashdata('error', 'Veuillez réessayer.');
-            redirect('index.php/Admin/Produit/modificationImages/'.$token);
+            redirect('Produits/modifierImages/'.$token);
         }
     }
 
@@ -722,7 +726,7 @@ class Produit extends CI_Controller
     public function enleverProduit($token = null){
         if($token == null)
         {
-            redirect("Admin/Produit/listeProduits");
+            redirect("Produits/liste");
         }
         else
         {
@@ -730,7 +734,7 @@ class Produit extends CI_Controller
 
             if($verificationProduit == true){
                 $this->session->set_flashdata('error', 'Vous n\'avez pas l\'autorisation de supprimer ce produit.');
-                redirect("Admin/Produit/listeProduits");
+                redirect("Produits/liste");
             }
             else{
                 $id_user = $this->session->userdata('id_user');
@@ -748,12 +752,12 @@ class Produit extends CI_Controller
                     $color = "danger";
                     $this->histoirque($action, $color);
                     $this->session->set_flashdata('success', 'Produit enlever.');
-                    redirect("Admin/Produit/listeProduits");
+                    redirect("Produits/liste");
                 }
                 else
                 {
                     $this->session->set_flashdata('error', 'Erreur survenu, veuillez réessayer.');
-                    redirect("Admin/Produit/listeProduits");
+                    redirect("Produits/liste");
                 }
             }
         }

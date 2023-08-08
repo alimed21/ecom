@@ -28,7 +28,7 @@
                     <?php endif;?>
 
                     <?php if($detailProd != false):?>
-                        <form class="form-horizontal" action="<?php echo base_url();?>Admin/Produit/modificationPrixQuantiterProduit" method="post">
+                        <form class="form-horizontal" action="<?php echo base_url();?>Produits/modifierixQuantiterProduit" method="post">
                             <?php foreach($detailProd as $prod):?>
                                 <input type="hidden" name="token" value="<?php echo $prod->token;?>">
 

@@ -1,3 +1,29 @@
+<div class="iq-navbar-header" style="height: 215px;">
+            <div class="container-fluid iq-container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="flex-wrap d-flex justify-content-between align-items-center">
+                            <div>
+                                <h1>ShopyGram</h1>
+                                <p>Plateforme e-commerce.</p>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="iq-header-img">
+                <img src="<?php echo base_url();?>assets/images/dashboard/top-header.png" alt="header" class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
+                <img src="<?php echo base_url();?>assets/images/dashboard/top-header1.png" alt="header" class="theme-color-purple-img img-fluid w-100 h-100 animated-scaleX">
+                <img src="<?php echo base_url();?>assets/images/dashboard/top-header2.png" alt="header" class="theme-color-blue-img img-fluid w-100 h-100 animated-scaleX">
+                <img src="<?php echo base_url();?>assets/images/dashboard/top-header3.png" alt="header" class="theme-color-green-img img-fluid w-100 h-100 animated-scaleX">
+                <img src="<?php echo base_url();?>assets/images/dashboard/top-header4.png" alt="header" class="theme-color-yellow-img img-fluid w-100 h-100 animated-scaleX">
+                <img src="<?php echo base_url();?>assets/images/dashboard/top-header5.png" alt="header" class="theme-color-pink-img img-fluid w-100 h-100 animated-scaleX">
+            </div>
+        </div>          <!-- Nav Header Component End -->
+        <!--Nav End-->
+    </div>
+    <div class="conatiner-fluid content-inner mt-n5 py-0">
 <div>
     <div class="row">
         <div class="col-sm-12 col-lg-12">
@@ -16,7 +42,7 @@
                         </div>
                     <?php endif;?>
 
-                    <form class="form-horizontal" action="<?php echo base_url();?>Admin/Parametres/modificationMotPasse" method="post">
+                    <form class="form-horizontal" action="<?php echo base_url();?>Parametres/modifierMotPasse" method="post">
                         <div class="form-group row">
                             <label class="control-label col-sm-3 align-self-center mb-0" for="email1">Ancien :<span style="color:red">*</span></label>
                             <div class="col-sm-9">

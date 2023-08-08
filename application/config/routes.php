@@ -62,15 +62,47 @@ $routes['listeUtilisateurs'] = 'Admin/Utilisateur';
 //$routes['Listeboutiques'] = 'Admin/Boutiques/index';
 //$route['ValidtationBoutique/(:any)'] = 'Admin/Boutiques/validBoutique/$1';
 
-/** Vendeur */
+                        /** Vendeur */
+
+/**** Parametres ****/
+$route['Parametres'] = 'Admin/Parametres/index';
 $route['Parametres/changerMotPasse'] = 'Admin/Parametres/motPasse';
+$route['Parametres/modifierMotPasse'] = 'Admin/Parametres/modificationMotPasse';
 $route['Parametres/voirProfile'] = 'Admin/Parametres/voirProfile';
 $route['Parametres/ajouterLogo'] = 'Admin/Parametres/ajouterLogo';
 $route['Parametres/ajouterProfil'] = 'Admin/Parametres/ajouterProfil';
 $route['Produit/listeProduits'] = 'Admin/Produit/listeProduits';
 $route['Erreur/erreur404'] = 'Admin/Erreur/index';
 $route['Parametres/modifierLogo'] = 'Admin/Parametres/modifierLogo';
+$route['Parametres/modificationLogo'] = 'Admin/Parametres/verificationModificationLogo';
+$route['Parametres/modifierPhotoProfile'] = 'Admin/Parametres/modifierImageProfile';
+$route['Parametres/validationModification'] = 'Admin/Parametres/modificationPhotoProfil';
 
+
+
+
+
+/**** Produit ****/
+$route['Produits/liste'] = 'Admin/Produit/listeProduits';
+$route['Produits/ajouter'] = 'Admin/Produit/index';
+$route['Produits/modificationProduit/(:any)'] = 'Admin/Produit/modifierProduit/$1';
+$route['Produits/modifierImages/(:any)'] = 'Admin/Produit/modificationImages/$1';
+$route['Produits/modifierImageProd'] = 'Admin/Produit/updateImageProd';
+$route['Produits/modifierUploadFiles'] = 'Admin/Produit/updateUploadFiles';
+$route['Produits/modifierPrixQuantite/(:any)'] = 'Admin/produit/modifierPrixQuantiterProduit/$1';
+$route['Produits/modifierixQuantiterProduit'] = 'Admin/produit/modificationPrixQuantiterProduit';
+$route['Produits/supprimerProduit/(:any)'] = 'Admin/Produit/enleverProduit/$1';
+
+/**** Utilisateurs ****/
+$route['Utilisateur/liste'] = 'Admin/Utilisateurs/index';
+$route['Utilisateur/ajouter'] = 'Admin/Utilisateurs/ajouterUtilisateur';
+
+/**** Commande ****/
+$route['Commande/liste'] = 'Admin/Commande/index';
+$route['Utilisateur/ajouter'] = 'Admin/Utilisateurs/ajouterUtilisateur';
+
+/**** Tableau de bord ****/
+$route['dashboardVendre'] = 'Admin/TableauBord/index';
 
 /** Users */
 $route['default_controller'] = 'Accueil';
